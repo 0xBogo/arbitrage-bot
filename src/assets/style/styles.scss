@@ -1,0 +1,12 @@
+@import "layouts/header";
+@import "layouts/sidebar";
+// @import "layouts/footer";
+
+@import "pages/dashboard";
+@import "pages/contracts";
+@import "pages/stats";
+@import "pages/settings";
+
+@import "pages/log";
+
+@import "./globals";
