@@ -1,0 +1,88 @@
+.log-layout {
+    width: 100%;
+    min-height: 100vh;
+    background: #004EDA;
+    font-family: 'Poppins', sans-serif;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+
+    .left-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .right-section {
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #5A5A5F;
+
+        .logup {
+            .title {
+                font-size: 32px;
+                font-weight: 500;
+                line-height: 48px;
+                margin-bottom: 36px;
+            }
+
+            .input {
+                margin-bottom: 24px;
+
+                .input-title {
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 21px;
+                    margin-bottom: 8px;
+                }
+
+                input {
+                    width: 352px;
+                    height: 56px;
+                    border: 1px solid #B6B6BB;
+                    border-radius: 4px;
+                    padding: 0 12px;
+
+
+                    &:focus {
+                        outline: none;
+                        border: 1px solid #36363B;
+                    }
+                }
+            }
+
+            .check {
+                display: flex;
+                width: 352px;
+                gap: 12px;
+                margin-bottom: 36px;
+
+                span {
+                    font-weight: 700;
+                    font-size: 10px;
+                    line-height: 15px;
+                }
+            }
+
+            button {
+                width: 352px;
+                height: 56px;
+                background: #004EDA;
+                border-radius: 4px;
+                text-align: center;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 36px;
+                color: #fff;
+            }
+
+            .already-created {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 21px;
+                margin-top: 24px;
+            }
+        }
+    }
+}
