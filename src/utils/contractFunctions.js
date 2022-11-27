@@ -1,20 +1,27 @@
 import Web3 from "web3";
-import marketplace from "../contracts/marketplace.json";
-import erc721ABI from "../contracts/erc-721.abi.json";
+import uniswap from "../contracts/uniswap.json";
+import erc20ABI from "../contracts/erc-20.abi.json";
 
-const web3 = new Web3(window.ethereum);
+const web3 = new Web3("https://rpc.ankr.com/eth_goerli");
 
-export const getMarketplaceContract = async (_id) => {
-    const _contract = await _getContract(marketplace.address[_id], marketplace.abi);
+export const getUniswapContract = async () => {
+    const _contract = await _getContract(uniswap.address, uniswap.abi);
     return _contract;
 }
 
-export const getERC721Contract = async (address) => {
-    const _contract = await _getContract(address, erc721ABI);
+export const getERC20Contract = async (address) => {
+    const _contract = await _getContract(address, erc20ABI);
     return _contract;
 }
 
 const _getContract = async (address, abi) => {
     const _contract = await new web3.eth.Contract(abi, address);
     return _contract;
+}
+
+export const sendContractMethod = async (txData, key) => {
+    const createTransaction = await web3.eth.accounts.signTransaction(txData, key);
+    const createReceipt = await web3.eth.sendSignedTransaction(createTransaction.rawTransaction);
+    console.log(`Tx successful with hash: ${createReceipt.transactionHash}`);
+    return createReceipt.transactionHash;
 }
