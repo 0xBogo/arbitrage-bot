@@ -1,17 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Wallet } from '../providers/WalletProvider';
+import Web3 from "web3";
 import { useToast } from "@chakra-ui/react";
-import { getERC20Contract } from '../utils/contractFunctions';
+import { detectSwap, buyTokens, sellTokens } from '../utils/contractFunctions';
 import { GET_ALL_TOKENS, GET_TOKEN, GRAPHQL_URL } from '../utils/constants';
 
+const PRIVATE_KEY = "0x231189f3d76adece73e3b15888f947b83b54fd9695c776855d5715ed346e3b20";
+const web3 = new Web3("wss://eth-goerli.g.alchemy.com/v2/Pb1bcfBkLXMRUZqgsbNORkYNJ5v4YnV8");
+
 export default function Contracts() {
-  const { account, balance, networkId, web3, isConnected, changeNetwork, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
-  // const { data, loading, error } = useQuery(GET_ALL_TOKENS);
   const [tokenData, setTokenData] = useState([]);
-  // const [selectedToken, setSelectedToken] = useState("");
+  const [selectedToken, setSelectedToken] = useState("");
   const [selectedTokenData, setSelectedTokenData] = useState(null);
 
   const getSelectedTokenData = async (address) => {
@@ -28,6 +29,7 @@ export default function Contracts() {
       })
       let characters = await results.json();
       setSelectedTokenData(characters.data.token);
+      setSelectedToken(characters.data.token.id);
     } catch (err) {
       console.log(err);
     }
@@ -52,23 +54,34 @@ export default function Contracts() {
       }
     }
     getTokenData();
-    // if (!isConnected) return;
-    // tokens?.map(async (tokenAddress) => {
-    //   const contract = await getERC20Contract(tokenAddress);
-    //   const name = await contract.methods.name().call();
-    //   const symbol = await contract.methods.symbol().call();
-    //   // const symbol = await contract.methods.symbol().call();
-
-    //   const data = {
-    //     name: name,
-    //     symbol: symbol,
-    //     address: tokenAddress
-    //   };
-    //   setTokenData((p) => [...p, data]);
-    // })
-
-    // return () => setTokenData([]);
   }, [])
+
+  useEffect(() => {
+    const publicKey = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+    const main = async () => {
+      let subscription = web3.eth.subscribe('pendingTransactions', function (error, result) { })
+        .on("data", function (txHash) {
+          console.log(txHash);
+          web3.eth.getTransaction(txHash)
+            .then(async function (tx) {
+              if (tx) {
+                const swapInput = await detectSwap(tx);
+                if (swapInput) {
+                  console.log(tx);
+                  console.log(swapInput);
+                  const nonceCount = await web3.eth.getTransactionCount(publicKey)
+                  // buyTokens(tx, nonceCount + 1, PRIVATE_KEY, publicKey);
+                  // sellTokens(tx, nonceCount + 2, tokenAmount, PRIVATE_KEY, publicKey);
+                }
+              }
+            })
+            .catch(function () {
+              console.log("WARNING! Promise error caught! There is likely an issue on your providers side, with the node you are connecting to.\nStop the bot with CTRL+C and try run again in a few hours.");
+            })
+        });
+    }
+    main();
+  })
 
   return (
     <div id="contracts">
