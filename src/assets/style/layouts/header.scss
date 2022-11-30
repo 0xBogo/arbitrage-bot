@@ -115,7 +115,6 @@
                 .network-lists {
                     background-color: #fff;
                     box-shadow: 0 2px 12px 0 #26293155;
-                    width: 300px;
                     position: absolute;
                     top: 24px;
                     right: 12px;
@@ -190,4 +189,9 @@
             }
         }
     }
+}
+
+.account-modal {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 }
