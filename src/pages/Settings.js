@@ -2,12 +2,63 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
 import uniswap from "../contracts/uniswap.json";
+import { addSubwallet, getMainWalletData } from '../utils/api';
 
 export default function Settings() {
-  const { account, balance, networkId, isConnected, changeNetwork, connect, disconnect } = useContext(Wallet);
+  const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
+  const [myWallets, setMyWallets] = useState();
+  const [privateKey, setPrivateKey] = useState("0x231189f3d76adece73e3b15888f947b83b54fd9695c776855d5715ed346e3b20");
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+
+  const addWallet = async () => {
+    if (!isConnected) {
+      toast({
+        title: 'Wallet not connected',
+        description: "",
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
+      return;
+    }
+    try {
+      const wallet = web3.eth.accounts.privateKeyToAccount(privateKey);
+      await addSubwallet(account, wallet.address, privateKey);
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+
+  const getData = async () => {
+
+    const data = await getMainWalletData(account);
+    console.log(data);
+    setMyWallets(data);
+  }
+
+  useEffect(() => {
+    if (!isConnected) {
+      toast({
+        title: 'Wallet not connected',
+        description: "",
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
+      return;
+    }
+    getData();
+  }, [account])
 
   return (
     <div id="settings">
@@ -36,6 +87,63 @@ export default function Settings() {
           <option value="Option3">Option3</option>
         </select>
       </div>
+      <div className="wallets">
+        <div className="title">
+          My Wallets
+        </div>
+        <div className="my-wallet-section">
+          <div className="wallets-list">
+            <div className="header">ID</div>
+            <div className="header">Public Key</div>
+            <div className="header">Private Key</div>
+            <div className="header">Balance</div>
+            <div className="header">Profit</div>
+            {
+              myWallets?.subwallets?.map((item, index) =>
+                <>
+                  <div className="element">{index + 1}</div>
+                  <div className="element">{item.public_key}</div>
+                  <div className="element">{item.private_key}</div>
+                  <div className="element">{}</div>
+                  <a className="element">{item.profit}</a>
+                </>
+              )
+            }
+          </div>
+          <div className="btn-container">
+            <button className="add-btn" onClick={onOpen}>+ Add</button>
+          </div>
+        </div>
+      </div>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent className="account-modal">
+          <ModalHeader>Input your account</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Input
+              value={privateKey}
+              onChange={(e) => setPrivateKey(e.target.value)}
+              placeholder='Private Key'
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={async () => {
+              await addWallet(privateKey);
+              onClose();
+            }}>
+              OK
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }

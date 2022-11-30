@@ -5,7 +5,7 @@ import { useToast } from "@chakra-ui/react";
 import uniswap from "../contracts/uniswap.json";
 
 export default function Stats() {
-  const { account, balance, networkId, isConnected, changeNetwork, connect, disconnect } = useContext(Wallet);
+  const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
 

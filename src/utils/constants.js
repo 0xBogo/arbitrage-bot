@@ -10,6 +10,10 @@ export const GET_ALL_TOKENS = `{
         tradeVolumeUSD
         untrackedVolumeUSD
         totalLiquidity
+        tokenDayData {
+            priceUSD
+            dailyVolumeUSD
+        }
     }
 }`;
 export const GET_TOKEN = (address) => `{

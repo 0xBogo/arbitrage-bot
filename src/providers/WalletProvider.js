@@ -5,6 +5,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import { useToast } from '@chakra-ui/react';
 import networks from "../providers/networks.json";
+import { addMainWallet } from '../utils/api';
 
 export const Wallet = createContext({
     account: null,
@@ -133,6 +134,7 @@ const WalletProvider = ({ children }) => {
             setNetworkId(_networkId);
             setWeb3(web3);
             setIsConnected(true);
+            addMainWallet(_account[0]);
         } catch (err) {
             toast({
                 title: 'Wallet connection failed',
@@ -166,7 +168,7 @@ const WalletProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        connect();
+        // connect();
     }, [])
 
     return (
