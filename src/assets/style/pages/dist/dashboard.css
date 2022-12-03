@@ -1,0 +1,203 @@
+#dashboard {
+  padding: 32px 36px;
+}
+#dashboard .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+}
+#dashboard .main-wallet-section {
+  margin-top: 32px;
+}
+#dashboard .main-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .main-wallet-section .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#dashboard .main-wallet-section .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#dashboard .main-wallet-section .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#dashboard .main-wallet-section .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#dashboard .subwallet-section {
+  margin-top: 32px;
+}
+#dashboard .subwallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .subwallet-section .subwallet {
+  margin-top: 12px;
+}
+#dashboard .subwallet-section .subwallet .subtitle {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+}
+#dashboard .subwallet-section .subwallet .contracts-details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#dashboard .subwallet-section .subwallet .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#dashboard .subwallet-section .subwallet .btn-container .start-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#dashboard .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#dashboard .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#dashboard .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#dashboard .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#dashboard .wallet-stats-section {
+  margin-top: 32px;
+}
+#dashboard .wallet-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .wallet-stats-section .container {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+}
+#dashboard .wallet-stats-section .container .filter {
+  text-align: right;
+}
+#dashboard .wallet-stats-section .container .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#dashboard .wallet-stats-section .container .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#dashboard .wallet-stats-section .container .stat-list {
+  height: 216px;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-column-gap: 1px;
+  margin-top: 24px;
+  overflow-y: auto;
+}
+#dashboard .wallet-stats-section .container .stat-list .header {
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+}
+#dashboard .wallet-stats-section .container .stat-list .element {
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#dashboard .wallet-stats-section .container .stat-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}

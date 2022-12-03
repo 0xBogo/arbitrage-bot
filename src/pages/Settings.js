@@ -11,7 +11,7 @@ export default function Settings() {
   const toast = useToast();
   const navigate = useNavigate();
   const [myWallets, setMyWallets] = useState();
-  const [privateKey, setPrivateKey] = useState("0x231189f3d76adece73e3b15888f947b83b54fd9695c776855d5715ed346e3b20");
+  const [privateKey, setPrivateKey] = useState("231189f3d76adece73e3b15888f947b83b54fd9695c776855d5715ed346e3b20");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -31,12 +31,11 @@ export default function Settings() {
     }
     try {
       const wallet = web3.eth.accounts.privateKeyToAccount(privateKey);
-      await addSubwallet(account, wallet.address, privateKey);
+      addSubwallet(account, wallet.address, privateKey);
       getData();
     } catch (err) {
       console.log(err);
     }
-
   }
 
   const getData = async () => {
