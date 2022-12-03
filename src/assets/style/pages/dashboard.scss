@@ -8,7 +8,7 @@
         line-height: 66px;
     }
 
-    .total-stats-section {
+    .main-wallet-section {
         margin-top: 32px;
 
         .title {
@@ -46,6 +46,114 @@
                     line-height: 36px;
                     color: #004EDA;
                 }
+            }
+        }
+    }
+
+    .subwallet-section {
+        margin-top: 32px;
+
+        .title {
+            color: #004EDA;
+            font-weight: 500;
+            font-size: 32px;
+            line-height: 48px;
+        }
+
+        .subwallet {
+            margin-top: 12px;
+
+            .subtitle {
+                color: #004EDA;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 36px;
+            }
+
+            .contracts-details {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(8, auto);
+                grid-column-gap: 1px;
+                grid-row-gap: 1px;
+                font-size: 12px;
+                line-height: 18px;
+                margin-top: 24px;
+                overflow-y: auto;
+                text-align: center;
+
+                .header {
+                    height: 30px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: #004EDA;
+                    color: #fff;
+                    padding: 6px 12px;
+                }
+
+                .element {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 6px 12px;
+                    background: #E6E6EB;
+
+                    button {
+                        padding: 3px 24px;
+                        background: #004EDA;
+                        border-radius: 4px;
+                        text-align: center;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
+
+            .btn-container {
+                margin-top: 30px;
+                width: 100%;
+                text-align: center;
+
+                .start-btn {
+                    padding: 6px 24px;
+                    background: #004EDA;
+                    border-radius: 4px;
+                    text-align: center;
+                    font-weight: 500;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .basic {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap: 32px;
+        margin-top: 32px;
+
+        .detail-item {
+            background: #fff;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            padding: 16px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .title {
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 27px;
+                color: #5A5A5F;
+            }
+
+            .value {
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 36px;
+                color: #004EDA;
             }
         }
     }
@@ -123,7 +231,6 @@
                 }
             }
         }
-
 
     }
 }

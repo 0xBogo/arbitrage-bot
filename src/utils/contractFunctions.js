@@ -8,7 +8,7 @@ import abiDecoder from 'abi-decoder';
 const {weth} = addresses;
 
 const provider = new Web3.providers.WebsocketProvider("wss://goerli.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161");
-const web3 = new Web3(provider);
+export const web3 = new Web3(provider);
 
 export const getUniswapContract = async () => {
     const _contract = await _getContract(uniswap.address, uniswap.abi);
@@ -25,6 +25,20 @@ export const getERC20Contract = async (address) => {
     return _contract;
 }
 
+export const getTokenData = async (address) => {
+    const _contract = await getERC20Contract(address);
+    const name = await _contract.methods.name().call();
+    const symbol = await _contract.methods.symbol().call();
+    const decimals = await _contract.methods.decimals().call();
+    const totalSupply = await _contract.methods.totalSupply().call();
+    return {name: name, symbol: symbol, decimals: decimals, totalSupply: totalSupply};
+}
+
+export const getBalance = async (address) => {
+    const balance = await web3.eth.getBalance(address);
+    return balance;
+}
+
 const _getContract = async (address, abi) => {
     const _contract = await new web3.eth.Contract(abi, address);
     return _contract;
@@ -38,8 +52,8 @@ export const sendContractMethod = async (txData, key) => {
 }
 
 export async function detectSwap(tx, account) {
-    if (tx?.to === uniswap.address && tx.from === "0xC86dB25cEA84eFa9555dBa78861E51bB884D1366") {
-        // console.log(tx);
+    if (tx?.to === uniswap.address) {
+        console.log(tx);
         let input = tx.input;
         try {
             input = abiDecoder.decodeMethod(input);
@@ -58,23 +72,23 @@ export async function detectSwap(tx, account) {
     return null;
 }
 
-export async function buyTokens(tx, nonce, token, account, ethAmountHex) {
+export async function buyTokens(tx, nonce, tokenAddress, account, ethAmountHex, tokenAmount) {
     try {
         const gasPrice = tx.gasPrice;
         const newGasPrice = Math.floor(parseInt(gasPrice) * 1.1);
         const newGasPriceHex = '0x' + newGasPrice.toString(16);
         const gasLimit = Math.floor(tx.gas * 1.2);
         const gasLimitHex = '0x' + gasLimit.toString(16);
-        const path = [weth, token];
+        const path = [weth, tokenAddress];
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
         const deadlineHex = "0x" + deadline.toString(16);
         const contract = await getUniswapContract();
-        const buyTx = contract.methods.swapExactETHForTokens(0, path, account.address, deadlineHex);
+        const buyTx = contract.methods.swapExactETHForTokens(0, path, account.publicKey, deadlineHex);
         console.log(gasLimit, newGasPrice);
         const createTx = await web3.eth.accounts.signTransaction(
             {
                 nonce: nonce,
-                from: account.address,
+                from: account.publicKey,
                 to: uniswap.address,
                 value: ethAmountHex,
                 gasPrice: newGasPriceHex,
@@ -93,15 +107,15 @@ export async function buyTokens(tx, nonce, token, account, ethAmountHex) {
     }
 }
 
-export async function sellTokens(tx, nonce, token, account, tokenAmount) {
+export async function sellTokens(tx, nonce, tokenAddress, account, tokenAmount) {
     try {
         const gasPrice = tx.gasPrice;
         const newGasPrice = Math.floor(parseInt(gasPrice) * 0.9);
-        const newGasPriceHex = '0x' + (6 * 1e9).toString(16);
+        const newGasPriceHex = '0x' + (2 * 1e9).toString(16);
         const gasLimit = Math.floor(tx.gas * 1.5);
         const gasLimitHex = '0x' + gasLimit.toString(16);
         const tokenAmountHex = '0x' + Number(tokenAmount).toString(16);
-        const path = [token, weth];
+        const path = [tokenAddress, weth];
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
         const deadlineHex = "0x" + deadline.toString(16);
         // const factory = await getUniswapFactoryContract();
@@ -122,12 +136,12 @@ export async function sellTokens(tx, nonce, token, account, tokenAmount) {
         // console.log(receipt);
         const contract = await getUniswapContract();
         console.log(tokenAmountHex);
-        const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, account.address, deadlineHex);
+        const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, account.publicKey, deadlineHex);
         console.log(gasLimit, newGasPrice);
         const createTx = await web3.eth.accounts.signTransaction(
             {
                 nonce: nonce,
-                from: account.address,
+                from: account.publicKey,
                 to: uniswap.address,
                 gasPrice: newGasPriceHex,
                 gas: gasLimitHex,

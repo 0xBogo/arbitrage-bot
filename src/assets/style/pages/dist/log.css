@@ -1,0 +1,77 @@
+.log-layout {
+  width: 100%;
+  min-height: 100vh;
+  background: #004EDA;
+  font-family: "Poppins", sans-serif;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+}
+.log-layout .left-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.log-layout .right-section {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5A5A5F;
+}
+.log-layout .right-section .logup .title {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 48px;
+  margin-bottom: 36px;
+}
+.log-layout .right-section .logup .input {
+  margin-bottom: 24px;
+}
+.log-layout .right-section .logup .input .input-title {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  margin-bottom: 8px;
+}
+.log-layout .right-section .logup .input input {
+  width: 352px;
+  height: 56px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+.log-layout .right-section .logup .input input:focus {
+  outline: none;
+  border: 1px solid #36363B;
+}
+.log-layout .right-section .logup .input .warning {
+  color: #cc3366;
+}
+.log-layout .right-section .logup .check {
+  display: flex;
+  width: 352px;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.log-layout .right-section .logup .check span {
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+}
+.log-layout .right-section .logup button {
+  width: 352px;
+  height: 56px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #fff;
+}
+.log-layout .right-section .logup .already-created {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  margin-top: 24px;
+}

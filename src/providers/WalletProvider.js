@@ -168,7 +168,7 @@ const WalletProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        // connect();
+        connect();
     }, [])
 
     return (

@@ -1,0 +1,119 @@
+#stats {
+  padding: 32px 36px;
+}
+#stats .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+}
+#stats .total-stats-section {
+  margin-top: 32px;
+}
+#stats .total-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#stats .total-stats-section .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#stats .total-stats-section .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#stats .total-stats-section .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#stats .total-stats-section .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#stats .wallet-stats-section, #stats .contract-stats-section {
+  margin-top: 32px;
+}
+#stats .wallet-stats-section .title, #stats .contract-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#stats .wallet-stats-section .container, #stats .contract-stats-section .container {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+}
+#stats .wallet-stats-section .container .filter, #stats .contract-stats-section .container .filter {
+  text-align: right;
+}
+#stats .wallet-stats-section .container .filter .title, #stats .contract-stats-section .container .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#stats .wallet-stats-section .container .filter select, #stats .contract-stats-section .container .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#stats .wallet-stats-section .container .stat-list, #stats .contract-stats-section .container .stat-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#stats .wallet-stats-section .container .stat-list .header, #stats .contract-stats-section .container .stat-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#stats .wallet-stats-section .container .stat-list .element, #stats .contract-stats-section .container .stat-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#stats .wallet-stats-section .container .stat-list .element button, #stats .contract-stats-section .container .stat-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#stats .contract-stats-section .container .stat-list {
+  grid-template-columns: repeat(7, auto);
+}
