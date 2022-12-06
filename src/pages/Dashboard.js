@@ -13,14 +13,12 @@ const { weth } = addresses;
 
 abiDecoder.addABI(uniswap.abi);
 
-export default function Dashboard() {
+export default function Dashboard({ethAmount, ethLimit}) {
   const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
   const [selectedToken, setSelectedToken] = useState("0xFa4719Ed5C32eaf2F346B73103f2204c755e3809");
   const [selectedTokenData, setSelectedTokenData] = useState(null);
-  const [ethAmount, setEthAmount] = useState(0.05);
-  const [ethLimit, setEthLimit] = useState(0.1);
   const [isBotRunning, setIsBotRunning] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [mainWalletData, setMainWalletData] = useState();
@@ -77,7 +75,7 @@ export default function Dashboard() {
         getBalance(publicKey).then(async (balance) => {
           if (balance > ethLimit * 1e18) {
             const nonce = await web3.eth.getTransactionCount(publicKey, 'latest');
-            const amount = balance - ethLimit * 1e18;
+            const amount = balance / 2;
             const tx = {
               to: account,
               value: amount,

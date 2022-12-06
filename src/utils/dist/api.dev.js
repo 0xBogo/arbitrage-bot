@@ -152,20 +152,19 @@ var getMainWalletData = function getMainWalletData(publicKey) {
 
         case 3:
           mainWalletData = _context5.sent;
-          console.log(mainWalletData);
           return _context5.abrupt("return", mainWalletData.data);
 
-        case 8:
-          _context5.prev = 8;
+        case 7:
+          _context5.prev = 7;
           _context5.t0 = _context5["catch"](0);
           console.log(_context5.t0);
 
-        case 11:
+        case 10:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[0, 8]]);
+  }, null, null, [[0, 7]]);
 };
 
 exports.getMainWalletData = getMainWalletData;

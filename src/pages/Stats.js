@@ -42,8 +42,8 @@ export default function Stats() {
         setContractSymbols(p => [...p, symbol]);
       })
       // console.log("item: ", item);
-      setWalletBalances(p => [...p, balance]);
-      setContractsData(p => [...p, ...contractData]);
+      setWalletBalances([...walletBalances, balance]);
+      setContractsData([...contractsData, ...contractData]);
     });
   }
 
