@@ -1,0 +1,115 @@
+#settings {
+  padding: 32px 36px;
+}
+#settings .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+  margin-bottom: 32px;
+}
+#settings .setting-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+#settings .setting-item .left .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-bottom: 12px;
+}
+#settings .setting-item .left .description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 12px;
+}
+#settings .setting-item .right input {
+  width: 240px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+#settings .setting-item .right button {
+  margin-left: 24px;
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#settings .wallets .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#settings .wallets .my-wallet-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#settings .wallets .my-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#settings .wallets .my-wallet-section .wallets-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#settings .wallets .my-wallet-section .wallets-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#settings .wallets .my-wallet-section .wallets-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#settings .wallets .my-wallet-section .wallets-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#settings .wallets .my-wallet-section .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#settings .wallets .my-wallet-section .btn-container .add-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}

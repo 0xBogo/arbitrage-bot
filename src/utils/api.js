@@ -41,7 +41,7 @@ export const updateTradingData = async (subwallet, contract, buy, sell, gasSpent
 export const getMainWalletData = async (publicKey) => {
     try {
         const mainWalletData = await axios.post(server + "/get/main_wallet", { publicKey: publicKey });
-        console.log(mainWalletData);
+        // console.log(mainWalletData);
         return mainWalletData.data;
     } catch (err) {
         console.log(err);

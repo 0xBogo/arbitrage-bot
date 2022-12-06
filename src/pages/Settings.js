@@ -7,7 +7,7 @@ import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
-export default function Settings() {
+export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -41,18 +41,6 @@ export default function Settings() {
   }
 
   const getData = async () => {
-    const data = await getMainWalletData(account);
-    console.log(data);
-    setMyWallets(data);
-    setBalances([]);
-    data.subwallets.forEach(async (item) => {
-      const balance = await getBalance(item.public_key);
-      console.log(balance);
-      setBalances([...balances, balance]);
-    })
-  }
-
-  useEffect(() => {
     if (!isConnected) {
       toast({
         title: 'Wallet not connected',
@@ -63,6 +51,18 @@ export default function Settings() {
       })
       return;
     }
+    const data = await getMainWalletData(account);
+    // console.log(data);
+    setMyWallets(data);
+    setBalances([]);
+    data.subwallets.forEach(async (item) => {
+      const balance = await getBalance(item.public_key);
+      // console.log(balance);
+      setBalances([...balances, balance]);
+    })
+  }
+
+  useEffect(() => {
     getData();
   }, [account])
 
@@ -73,25 +73,23 @@ export default function Settings() {
       </div>
       <div className="setting-item">
         <div className="left">
-          <div className="title">Contract Filter</div>
-          <div className="description">Adjust filters for which contracts qualify</div>
+          <div className="title">ETH per Bot</div>
+          <div className="description">Adjust ETH amount for each bot</div>
         </div>
-        <select className="right">
-          <option value="Option1">Option1</option>
-          <option value="Option2">Option2</option>
-          <option value="Option3">Option3</option>
-        </select>
+        <div className="right">
+          <input value={ethAmount} onChange={e => setEthAmount(e.target.value)} />
+          <button className="default-btn">Set</button>
+        </div>
       </div>
       <div className="setting-item">
         <div className="left">
-          <div className="title">Wallet Filter</div>
-          <div className="description">Adjust which wallets are used by the bot</div>
+          <div className="title">ETH Limit</div>
+          <div className="description">Adjust ETH limit for eth subwallet</div>
         </div>
-        <select className="right">
-          <option value="Option1">Option1</option>
-          <option value="Option2">Option2</option>
-          <option value="Option3">Option3</option>
-        </select>
+        <div className="right">
+          <input value={ethLimit} onChange={e => setEthLimit(e.target.value)} />
+          <button className="default-btn">Set</button>
+        </div>
       </div>
       <div className="wallets">
         <div className="title">
