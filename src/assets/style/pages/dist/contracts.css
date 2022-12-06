@@ -1,0 +1,136 @@
+#contracts {
+  padding: 32px 36px;
+}
+#contracts .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#contracts .contract-list-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#contracts .contract-list-section .filter {
+  text-align: right;
+}
+#contracts .contract-list-section .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#contracts .contract-list-section .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#contracts .contract-list-section .contract-list {
+  max-height: 720px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#contracts .contract-list-section .contract-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#contracts .contract-list-section .contract-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#contracts .contract-list-section .contract-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#contracts .contract-wallet-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#contracts .contract-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#contracts .contract-wallet-section .contract-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#contracts .contract-wallet-section .contract-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#contracts .contract-wallet-section .contract-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#contracts .contract-wallet-section .contract-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#contracts .contract-wallet-section .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#contracts .contract-wallet-section .btn-container .start-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}

@@ -101,7 +101,7 @@ export default function Contracts() {
           }
         </div>
       </div>
-      <div className="title">
+      {/* <div className="title">
         Selected Contracts
       </div>
       <div className="contract-wallet-section">
@@ -125,14 +125,7 @@ export default function Contracts() {
             ))
           }
         </div>
-        {/* <div className="btn-container">
-          {
-            isBotRunning
-              ? <button className="start-btn" onClick={stopBot}>Stop Bot</button>
-              : <button className="start-btn" onClick={startBot}>Start Bot</button>
-          }
-        </div> */}
-      </div>
+      </div> */}
     </div>
   )
 }

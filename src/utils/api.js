@@ -1,5 +1,6 @@
 import axios from "axios"
 const server = "https://sandwitchbackend.vercel.app";
+// const server = "http://localhost:5000";
 
 export const addMainWallet = async (publicKey) => {
     try {
@@ -30,7 +31,7 @@ export const addContracts = async (subwallet, contracts) => {
 
 export const updateTradingData = async (subwallet, contract, buy, sell, gasSpent) => {
     try {
-        await axios.post(server + "/update", { subwallet: subwallet, contract: contract, buy:buy, sell: sell, gasSpent: gasSpent });
+        await axios.post(server + "/update", { subwallet: subwallet, contract: contract, buy: buy, sell: sell, gasSpent: gasSpent });
         // console.log("success");
     } catch (err) {
         console.log(err.message);
@@ -40,10 +41,10 @@ export const updateTradingData = async (subwallet, contract, buy, sell, gasSpent
 export const getMainWalletData = async (publicKey) => {
     try {
         const mainWalletData = await axios.post(server + "/get/main_wallet", { publicKey: publicKey });
-        // console.log("success");
+        console.log(mainWalletData);
         return mainWalletData.data;
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
     }
 }
 
