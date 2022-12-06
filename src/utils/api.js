@@ -1,5 +1,5 @@
 import axios from "axios"
-const server = "http://localhost:5000";
+const server = "https://sandwitchbackend.vercel.app";
 
 export const addMainWallet = async (publicKey) => {
     try {
