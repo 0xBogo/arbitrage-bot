@@ -5,13 +5,15 @@ import { useToast } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
 import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, getMainWalletData } from '../utils/api';
+import { getBalance } from '../utils/contractFunctions';
 
 export default function Settings() {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
   const [myWallets, setMyWallets] = useState();
-  const [privateKey, setPrivateKey] = useState("231189f3d76adece73e3b15888f947b83b54fd9695c776855d5715ed346e3b20");
+  const [balances, setBalances] = useState([]);
+  const [privateKey, setPrivateKey] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,10 +41,15 @@ export default function Settings() {
   }
 
   const getData = async () => {
-
     const data = await getMainWalletData(account);
     console.log(data);
     setMyWallets(data);
+    setBalances([]);
+    data.subwallets.forEach(async (item) => {
+      const balance = await getBalance(item.public_key);
+      console.log(balance);
+      setBalances([...balances, balance]);
+    })
   }
 
   useEffect(() => {
@@ -103,8 +110,8 @@ export default function Settings() {
                   <div className="element">{index + 1}</div>
                   <div className="element">{item.public_key}</div>
                   <div className="element">{item.private_key}</div>
-                  <div className="element">{}</div>
-                  <a className="element">{item.profit}</a>
+                  <div className="element">{(balances[index] / 1e18).toFixed(4)}</div>
+                  <a className="element">{((item.sells - item.buys) / 1e18).toFixed(4)}</a>
                 </>
               )
             }

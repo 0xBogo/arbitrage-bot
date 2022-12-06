@@ -9,7 +9,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var server = "https://sandwitchbackend.vercel.app";
+var server = "https://sandwitchbackend.vercel.app"; // const server = "http://localhost:5000";
 
 var addMainWallet = function addMainWallet(publicKey) {
   return regeneratorRuntime.async(function addMainWallet$(_context) {
@@ -152,19 +152,20 @@ var getMainWalletData = function getMainWalletData(publicKey) {
 
         case 3:
           mainWalletData = _context5.sent;
+          console.log(mainWalletData);
           return _context5.abrupt("return", mainWalletData.data);
 
-        case 7:
-          _context5.prev = 7;
+        case 8:
+          _context5.prev = 8;
           _context5.t0 = _context5["catch"](0);
-          console.log(_context5.t0.message);
+          console.log(_context5.t0);
 
-        case 10:
+        case 11:
         case "end":
           return _context5.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 8]]);
 };
 
 exports.getMainWalletData = getMainWalletData;
