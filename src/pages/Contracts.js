@@ -14,10 +14,6 @@ export default function Contracts() {
   const [tokenData, setTokenData] = useState([]);
   const [selectedToken, setSelectedToken] = useState("0xFa4719Ed5C32eaf2F346B73103f2204c755e3809");
   const [selectedTokenData, setSelectedTokenData] = useState(null);
-  const [ethAmount, setEthAmount] = useState(0.05);
-  const [isBotRunning, setIsBotRunning] = useState(false);
-  const [subscription, setSubscription] = useState(null);
-  const [flag, setFlag] = useState([]);
 
   const getSelectedTokenData = async (address) => {
     // console.log(GET_TOKEN(address));
@@ -59,60 +55,6 @@ export default function Contracts() {
     }
     getTokenData();
   }, [])
-
-  const startBot = async () => {
-    if (!isConnected) {
-      toast({
-        title: 'Wallet not connected',
-        description: "",
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-      })
-      return;
-    }
-    setIsBotRunning(true);
-    let subscription = web3.eth.subscribe('pendingTransactions', function (error, result) { })
-      .on("data", function (txHash) {
-        if (flag[txHash]) return;
-        flag[txHash] = true;
-        // console.log(flag);
-        // console.log(txHash);
-        web3.eth.getTransaction(txHash)
-          .then(async function (tx) {
-            if (tx?.from === account.address) return;
-            if (tx) {
-              const swapInput = await detectSwap(tx, account);
-              // console.log(swapInput);
-              if (swapInput) {
-                console.log(tx);
-                console.log(swapInput);
-                const nonceCount = await web3.eth.getTransactionCount(account.address);
-                console.log(nonceCount);
-                const contract = await getUniswapContract();
-                const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
-                let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, selectedToken]).call();
-                const tokenAmount = tokenAmounts[1];
-                console.log(tokenAmount);
-                buyTokens(tx, nonceCount, selectedToken, account, ethAmountHex);
-                sellTokens(tx, nonceCount + 1, selectedToken, account, tokenAmount);
-              }
-            }
-          })
-          .catch(function (err) {
-            console.log(err);
-          })
-      });
-    setSubscription(subscription);
-  }
-
-  const stopBot = () => {
-    subscription.unsubscribe(function (error, success) {
-      if (success)
-        console.log('unsubscribed');
-    });
-    setIsBotRunning(false);
-  }
 
   return (
     <div id="contracts">
@@ -183,13 +125,13 @@ export default function Contracts() {
             ))
           }
         </div>
-        <div className="btn-container">
+        {/* <div className="btn-container">
           {
             isBotRunning
               ? <button className="start-btn" onClick={stopBot}>Stop Bot</button>
               : <button className="start-btn" onClick={startBot}>Start Bot</button>
           }
-        </div>
+        </div> */}
       </div>
     </div>
   )

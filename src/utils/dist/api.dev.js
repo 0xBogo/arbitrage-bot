@@ -9,7 +9,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var server = "http://localhost:5000";
+var server = "https://sandwitchbackend.vercel.app";
 
 var addMainWallet = function addMainWallet(publicKey) {
   return regeneratorRuntime.async(function addMainWallet$(_context) {
