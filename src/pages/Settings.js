@@ -7,7 +7,7 @@ import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
-export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit }) {
+export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit, accountEmail }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -63,6 +63,10 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
   }
 
   useEffect(() => {
+    if(!accountEmail) window.location.href = "/login";
+  })
+
+  useEffect(() => {
     getData();
   }, [account])
 
@@ -78,7 +82,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
         </div>
         <div className="right">
           <input value={ethAmount} onChange={e => setEthAmount(e.target.value)} />
-          <button className="default-btn">Set</button>
+          {/* <button className="default-btn">Set</button> */}
         </div>
       </div>
       <div className="setting-item">
@@ -88,7 +92,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
         </div>
         <div className="right">
           <input value={ethLimit} onChange={e => setEthLimit(e.target.value)} />
-          <button className="default-btn">Set</button>
+          {/* <button className="default-btn">Set</button> */}
         </div>
       </div>
       <div className="wallets">

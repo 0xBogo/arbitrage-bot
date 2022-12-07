@@ -1,0 +1,262 @@
+#header {
+  position: fixed;
+  top: 0;
+  height: 64px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  backdrop-filter: blur(12px);
+  z-index: 99;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+#header .left {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-left: 30px;
+}
+#header .left .logo {
+  width: auto;
+  padding: 0 18px;
+  height: 64px;
+}
+#header .left .logo img {
+  height: 100%;
+}
+#header .left .nav-item {
+  width: auto;
+  height: 100%;
+  padding: 0 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.6;
+  position: relative;
+  transition: all 1s;
+  cursor: pointer;
+}
+#header .left .nav-item .page-links {
+  display: none;
+}
+#header .left .nav-item:hover {
+  opacity: 1;
+}
+#header .left .nav-item:hover .page-links {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #262931aa;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+#header .left .nav-item:hover .page-links a {
+  padding-left: 12px;
+  width: 180px;
+  line-height: 48px;
+  opacity: 0.6;
+  transition: all 1s;
+}
+#header .left .nav-item:hover .page-links a:hover {
+  opacity: 1;
+  background: #00000020;
+}
+#header .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 30px;
+}
+#header .right .create-btn {
+  padding: 0 24px;
+  background-image: linear-gradient(90deg, #ea63d7 0, #6060ef 50%, #76d5fa);
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 32px;
+  transition: background-position 0.5s;
+  background-size: 200%;
+  background-position: 0%;
+}
+#header .right .create-btn:hover {
+  background-position: 100%;
+}
+#header .right .change-network {
+  position: relative;
+}
+#header .right .change-network .connected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  background-color: #004EDA;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+#header .right .change-network .connected:hover {
+  background-color: #fff;
+  color: #000;
+}
+#header .right .change-network .connected img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .change-network .network-lists {
+  display: none;
+}
+#header .right .change-network:hover .network-lists {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 36px;
+  left: 0;
+  width: 100%;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+}
+#header .right .change-network:hover .network-lists .network {
+  padding-left: 12px;
+  line-height: 36px;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#header .right .change-network:hover .network-lists .network img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .change-network:hover .network-lists .network:hover {
+  background: #00000020;
+}
+#header .right .connect {
+  padding: 0 30px;
+  margin-left: 12px;
+  position: relative;
+}
+#header .right .connect .network-lists {
+  display: none;
+}
+#header .right .connect:hover .network-lists {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 24px;
+  right: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+}
+#header .right .connect:hover .network-lists .network {
+  padding-left: 12px;
+  line-height: 36px;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#header .right .connect:hover .network-lists .network img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .connect:hover .network-lists .network:hover {
+  background: #00000020;
+}
+#header .right .connect:hover .network-lists .disconnect-btn {
+  margin-inline: auto;
+  padding: 0 24px;
+  width: 160px;
+  border-radius: 50vmax;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+}
+#header .right .connect:hover .network-lists .disconnect-btn:hover {
+  color: #fff;
+  background-color: #000;
+}
+#header .right .connect .connect-btn {
+  padding: 0 24px;
+  border-radius: 4px;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: background-color 1s;
+}
+#header .right .connect .connect-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+#header .right .user-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+#header .right .user-btn img {
+  width: 100%;
+  height: 100%;
+}
+#header .right .user-btn .account-detail {
+  display: none;
+}
+#header .right .user-btn:hover .account-detail {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 36px;
+  right: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+#header .right .user-btn:hover .account-detail .email {
+  line-height: 36px;
+}
+#header .right .user-btn:hover .account-detail a {
+  margin-inline: auto;
+  padding: 0 24px;
+  width: 160px;
+  border-radius: 50vmax;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+}
+#header .right .user-btn:hover .account-detail a:hover {
+  color: #fff;
+  background-color: #000;
+}
+
+.account-modal {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
