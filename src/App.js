@@ -14,17 +14,18 @@ import Login from './pages/Login';
 function App() {
   const [ethAmount, setEthAmount] = useState("0.05");
   const [ethLimit, setEthLimit] = useState("1");
+  const [accountEmail, setAccountEmail] = useState("null");
 
   return (
       <ChakraProvider>
-        <Layout>
+        <Layout accountEmail={accountEmail}>
           <Routes>
-            <Route index element={<Dashboard ethAmount={ethAmount} ethLimit={ethLimit} />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/stats" element={<Stats />} />
-            <Route path="/settings" element={<Settings ethAmount={ethAmount} setEthAmount={setEthAmount} ethLimit={ethLimit} setEthLimit={setEthLimit} />} />
+            <Route index element={<Dashboard ethAmount={ethAmount} ethLimit={ethLimit} accountEmail={accountEmail} />} />
+            <Route path="/contracts" element={<Contracts accountEmail={accountEmail} />} />
+            <Route path="/stats" element={<Stats accountEmail={accountEmail} />} />
+            <Route path="/settings" element={<Settings ethAmount={ethAmount} setEthAmount={setEthAmount} ethLimit={ethLimit} setEthLimit={setEthLimit} accountEmail={accountEmail} />} />
             <Route path="/logup" element={<Logup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setAccountEmail={setAccountEmail} accountEmail={accountEmail} />} />
           </Routes>
         </Layout>
       </ChakraProvider>

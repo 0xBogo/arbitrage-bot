@@ -44,6 +44,12 @@ const _getContract = async (address, abi) => {
     return _contract;
 }
 
+export const getPairAddress = async (address) => {
+    const contract = await getUniswapFactoryContract();
+    const pair = await contract.methods.getPair(address, weth).call();
+    return pair;
+}
+
 export const sendContractMethod = async (txData, key) => {
     const createTransaction = await web3.eth.accounts.signTransaction(txData, key);
     const createReceipt = await web3.eth.sendSignedTransaction(createTransaction.rawTransaction);

@@ -7,11 +7,15 @@ import networks from "../providers/networks.json";
 import logo from "../assets/img/logo.png";
 import bsc from "../assets/img/bsc.png";
 import eth from "../assets/img/eth.png";
-import polygon from "../assets/img/polygon.png";
 import user from "../assets/img/user.svg";
 
-export default function Header() {
-    const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
+const chainLogo = {
+    97: bsc,
+    5: eth
+};
+
+export default function Header({accountEmail}) {
+    const { account, balance, isConnected, networkId, changeNetwork, connect, disconnect } = useContext(Wallet);
 
     return (
         <div id="header">
@@ -24,6 +28,23 @@ export default function Header() {
                 {/* <Link className="create-btn" to="/settings">
                     + Add Subwallet
                 </Link> */}
+                {
+                    isConnected &&
+                    <div className="change-network">
+                        <div className="connected">
+                            <img src={chainLogo[networkId]} />
+                            {networks[networkId].chainName}
+                        </div>
+                        <div className="network-lists">
+                            <div className="network" onClick={() => changeNetwork(97)}>
+                                <img src={bsc} />BSC Testnet
+                            </div>
+                            <div className="network" onClick={() => changeNetwork(5)}>
+                                <img src={eth} />Goerli Testnet
+                            </div>
+                        </div>
+                    </div>
+                }
                 <div className="connect">
                     {
                         isConnected
@@ -40,9 +61,13 @@ export default function Header() {
                             : <button className="connect-btn" onClick={connect}>Connect</button>
                     }
                 </div>
-                <Link className="user-btn" to="/settings">
+                <div className="user-btn">
                     <img src={user} />
-                </Link>
+                    <div className="account-detail">
+                        <div className="email">{accountEmail}</div>
+                        <a href="/login">Log out</a>
+                    </div>
+                </div>
             </div>
         </div>
     )

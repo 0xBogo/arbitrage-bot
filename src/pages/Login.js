@@ -5,7 +5,7 @@ import logo from "../assets/img/logo-white.png";
 import { verifyUser } from '../utils/api';
 
 
-export default function Login() {
+export default function Login({accountEmail, setAccountEmail}) {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [checkFlags, setCheckFlags] = useState([]);
@@ -37,7 +37,8 @@ export default function Login() {
           break;
         }
         case 2: {
-          window.location.href = "/";
+          setAccountEmail(email);
+          navigate("/");
         }
       }
     } catch (err) {

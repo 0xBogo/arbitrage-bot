@@ -3,7 +3,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 
-export default function Layout({ children }) {
+export default function Layout({ children, accountEmail }) {
   if (window.location.pathname === "/logup") return (
     <div className="log-layout">
       {children}
@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   )
   return (
     <>
-      <Header />
+      <Header accountEmail={accountEmail} />
       <Sidebar />
       <div className="page-content">
         {children}
