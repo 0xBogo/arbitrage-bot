@@ -23,7 +23,7 @@ export const addSubwallet = async (mainWallet, publicKey, privateKey) => {
 export const addContracts = async (subwallet, contracts) => {
     try {
         await axios.post(server + "/add/contracts", { subwallet: subwallet, contracts: contracts });
-        // console.log("success");
+        console.log("success");
     } catch (err) {
         console.log(err.message);
     }
