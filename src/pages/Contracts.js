@@ -2,20 +2,29 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react';
 import { detectSwap, buyTokens, sellTokens, getUniswapContract, getPairAddress } from '../utils/contractFunctions';
 import { GET_ALL_TOKENS, GET_TOKEN, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
+import { addContracts, getMainWalletData } from '../utils/api';
 const { weth } = addresses;
 
 export default function Contracts({ accountEmail }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
+  const [mainWalletData, setMainWalletData] = useState(null);
   const [tokenData, setTokenData] = useState([]);
-  const [selectedToken, setSelectedToken] = useState("0xFa4719Ed5C32eaf2F346B73103f2204c755e3809");
+  const [selectedToken, setSelectedToken] = useState("");
   const [selectedTokenData, setSelectedTokenData] = useState(null);
   const [pairData, setPairData] = useState([]);
   const [sortOption, setSortOption] = useState("Address");
+  const [subwallet, setSubwallet] = useState("");
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
 
   const getSelectedTokenData = async (address) => {
     // console.log(GET_TOKEN(address));
@@ -35,6 +44,14 @@ export default function Contracts({ accountEmail }) {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  const onSelect = async (address) => {
+    setSelectedToken(address);
+    const data = await getMainWalletData(account);
+    setMainWalletData(data);
+    setSubwallet(data?.subwallets[0].public_key);
+    onOpen();
   }
 
   const sortByAddress = (isReverse, tokens) => {
@@ -124,6 +141,7 @@ export default function Contracts({ accountEmail }) {
         // setTokenData(characters.data.tokens);
         let tokenData = [];
         for (let i = 0; i < characters.data.tokens.length; i++) {
+          if(!characters.data.tokens[i].tokenDayData[1]?.priceUSD) continue;
           // console.log(characters.data.tokens[i].id);
           const pairAddress = await getPairAddress(characters.data.tokens[i].id);
           const mcap = characters.data.tokens[i].totalSupply * characters.data.tokens[i].tokenDayData[1]?.priceUSD;
@@ -225,6 +243,7 @@ export default function Contracts({ accountEmail }) {
           <div className="header">Liquidity</div>
           <div className="header">MCap</div>
           <div className="header">Price</div>
+          <div className="header">24h Volume</div>
           <div className="header">Buy/Sell Taxes</div>
           <div className="header">Action</div>
           {
@@ -237,9 +256,10 @@ export default function Contracts({ accountEmail }) {
                 <div className="element">{item.totalLiquidity}</div>
                 <div className="element">{item.mcap}</div>
                 <div className="element">{item.tokenDayData[1]?.priceUSD}</div>
+                <div className="element">{item.tradeVolumeUSD}</div>
                 <div className="element">0% / 0%</div>
                 <div className="element">
-                  <button onClick={() => getSelectedTokenData(item.id)}>Select</button>
+                  <button onClick={() => {onSelect(item.id)}}>Select</button>
                 </div>
               </>
             ))
@@ -272,6 +292,39 @@ export default function Contracts({ accountEmail }) {
           }
         </div>
       </div> */}
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        width="500px"
+      >
+        <ModalOverlay />
+        <ModalContent className="account-modal">
+          <ModalHeader>Select subwallet to use</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <select onChange={e => setSubwallet(e.target.value)}>
+              {
+                mainWalletData?.subwallets?.map((item, index) => (
+                  <option key={index} value={item.public_key}>{item.public_key}</option>
+                ))
+              }
+            </select>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => {
+              console.log(subwallet, selectedToken);
+              addContracts(subwallet, [selectedToken]);
+              onClose();
+            }}>
+              OK
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }

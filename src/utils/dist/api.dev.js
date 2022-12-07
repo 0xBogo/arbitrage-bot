@@ -86,20 +86,21 @@ var addContracts = function addContracts(subwallet, contracts) {
           }));
 
         case 3:
-          _context3.next = 8;
+          console.log("success");
+          _context3.next = 9;
           break;
 
-        case 5:
-          _context3.prev = 5;
+        case 6:
+          _context3.prev = 6;
           _context3.t0 = _context3["catch"](0);
           console.log(_context3.t0.message);
 
-        case 8:
+        case 9:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.addContracts = addContracts;
