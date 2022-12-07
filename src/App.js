@@ -14,7 +14,7 @@ import Login from './pages/Login';
 function App() {
   const [ethAmount, setEthAmount] = useState("0.05");
   const [ethLimit, setEthLimit] = useState("1");
-  const [accountEmail, setAccountEmail] = useState("1");
+  const [accountEmail, setAccountEmail] = useState("");
 
   return (
       <ChakraProvider>
