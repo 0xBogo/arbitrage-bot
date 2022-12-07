@@ -347,9 +347,9 @@ export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
                 }
 
               </div>
-              <div className="btn-container">
+              {/* <div className="btn-container">
                 <button className="start-btn" onClick={() => { setSelectedSubwallet(item.public_key); onOpen(); }}>Add Contract</button>
-              </div>
+              </div> */}
             </div>
           )
         }
