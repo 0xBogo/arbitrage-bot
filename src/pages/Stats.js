@@ -6,7 +6,7 @@ import { addContracts, getContractData, getMainWalletData, updateTradingData } f
 import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
 
-export default function Stats({accountEmail}) {
+export default function Stats() {
   const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
   const [ethAmount, setEthAmount] = useState(0.05);
   const [isBotRunning, setIsBotRunning] = useState([]);
@@ -22,8 +22,9 @@ export default function Stats({accountEmail}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!accountEmail) window.location.href = "/login";
-  })
+    let email = sessionStorage.getItem("email");
+    if (!email) window.location.href = "/login";
+  }, [])
 
   const getData = async () => {
     if (!isConnected) return;

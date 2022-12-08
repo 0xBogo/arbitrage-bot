@@ -9,7 +9,7 @@ import addresses from "../contracts/address.json";
 import { addContracts, getMainWalletData } from '../utils/api';
 const { weth } = addresses;
 
-export default function Contracts({ accountEmail }) {
+export default function Contracts() {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -121,8 +121,9 @@ export default function Contracts({ accountEmail }) {
   }
 
   useEffect(() => {
-    if (!accountEmail) window.location.href = "/login";
-  })
+    let email = sessionStorage.getItem("email");
+    if (!email) window.location.href = "/login";
+  }, [])
 
   useEffect(() => {
     const getTokenData = async () => {

@@ -13,7 +13,7 @@ const { weth } = addresses;
 
 abiDecoder.addABI(uniswap.abi);
 
-export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
+export default function Dashboard({ ethAmount, ethLimit }) {
   const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -277,8 +277,9 @@ export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
   }
 
   useEffect(() => {
-    if (!accountEmail) window.location.href = "/login";
-  })
+    let email = sessionStorage.getItem("email");
+    if (!email) window.location.href = "/login";
+  }, [])
 
   useEffect(() => {
     getData();

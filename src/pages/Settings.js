@@ -7,7 +7,7 @@ import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, deleteSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
-export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit, accountEmail }) {
+export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -82,8 +82,9 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
   }
 
   useEffect(() => {
-    if (!accountEmail) window.location.href = "/login";
-  })
+    let email = sessionStorage.getItem("email");
+    if (!email) window.location.href = "/login";
+  }, [])
 
   useEffect(() => {
     getData();
