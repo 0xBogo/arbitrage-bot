@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Wallet } from '../providers/WalletProvider';
 import { TriangleDownIcon } from "@chakra-ui/icons";
@@ -7,6 +7,7 @@ import networks from "../providers/networks.json";
 import logo from "../assets/img/logo.png";
 import bsc from "../assets/img/bsc.png";
 import eth from "../assets/img/eth.png";
+import disabled from "../assets/img/disabled.svg";
 import user from "../assets/img/user.svg";
 
 const chainLogo = {
@@ -14,8 +15,14 @@ const chainLogo = {
     5: eth
 };
 
-export default function Header({accountEmail}) {
+export default function Header() {
     const { account, balance, isConnected, networkId, changeNetwork, connect, disconnect } = useContext(Wallet);
+    const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        let email = sessionStorage.getItem("email");
+        setEmail(email);
+      }, [])
 
     return (
         <div id="header">
@@ -32,8 +39,16 @@ export default function Header({accountEmail}) {
                     isConnected &&
                     <div className="change-network">
                         <div className="connected">
-                            <img src={chainLogo[networkId]} />
-                            {networks[networkId].chainName}
+                            <img src={
+                                chainLogo[networkId]
+                                ? chainLogo[networkId]
+                                : disabled
+                            } />
+                            {
+                                networks[networkId]?.chainName
+                                    ? networks[networkId]?.chainName
+                                    : "Unknown Network"
+                            }
                         </div>
                         <div className="network-lists">
                             <div className="network" onClick={() => changeNetwork(97)}>
@@ -64,7 +79,7 @@ export default function Header({accountEmail}) {
                 <div className="user-btn">
                     <img src={user} />
                     <div className="account-detail">
-                        <div className="email">{accountEmail}</div>
+                        <div className="email">{email}</div>
                         <a href="/login">Log out</a>
                     </div>
                 </div>

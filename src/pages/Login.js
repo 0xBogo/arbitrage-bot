@@ -5,7 +5,7 @@ import logo from "../assets/img/logo-white.png";
 import { verifyUser } from '../utils/api';
 
 
-export default function Login({accountEmail, setAccountEmail}) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [checkFlags, setCheckFlags] = useState([]);
@@ -37,15 +37,20 @@ export default function Login({accountEmail, setAccountEmail}) {
           break;
         }
         case 2: {
-          setAccountEmail(email);
-          navigate("/");
+          sessionStorage.setItem("email", email);
+          // setAccountEmail(email);
+          window.location.href = "/";
         }
       }
     } catch (err) {
       console.log(err);
     }
   }
-
+  
+  useEffect(() => {
+    let email = sessionStorage.getItem("email");
+    setEmail(email);
+  }, [])
 
   return (
     <>
