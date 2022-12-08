@@ -97,3 +97,21 @@ export const verifyUser = async (email, pwd) => {
         console.log(err.message);
     }
 }
+
+export const deleteSubwallet = async (publicKey) => {
+    try {
+        await axios.post(server + "/delete/subwallet", { publicKey: publicKey });
+        // console.log("success");
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+export const deleteContract = async (publicKey, contract) => {
+    try {
+        await axios.post(server + "/delete/contract", { subwallet: publicKey, contract: contract});
+        console.log("success");
+    } catch (err) {
+        console.log(err.message);
+    }
+}

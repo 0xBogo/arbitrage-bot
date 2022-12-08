@@ -4,7 +4,7 @@ import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
 import uniswap from "../contracts/uniswap.json";
-import { addSubwallet, getMainWalletData } from '../utils/api';
+import { addSubwallet, deleteSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
 export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit, accountEmail }) {
@@ -40,6 +40,25 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
     }
   }
 
+  const deleteWallet = async (address) => {
+    if (!isConnected) {
+      toast({
+        title: 'Wallet not connected',
+        description: "",
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
+      return;
+    }
+    try {
+      deleteSubwallet(address);
+      getData();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const getData = async () => {
     if (!isConnected) {
       toast({
@@ -63,7 +82,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
   }
 
   useEffect(() => {
-    if(!accountEmail) window.location.href = "/login";
+    if (!accountEmail) window.location.href = "/login";
   })
 
   useEffect(() => {
@@ -106,6 +125,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
             <div className="header">Private Key</div>
             <div className="header">Balance</div>
             <div className="header">Profit</div>
+            <div className="header">Action</div>
             {
               myWallets?.subwallets?.map((item, index) =>
                 <>
@@ -114,6 +134,9 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
                   <div className="element">{item.private_key}</div>
                   <div className="element">{(balances[index] / 1e18).toFixed(4)}</div>
                   <a className="element">{((item.sells - item.buys) / 1e18).toFixed(4)}</a>
+                  <div className="element">
+                    <button onClick={() => deleteWallet(item.public_key)}>Delete</button>
+                  </div>
                 </>
               )
             }

@@ -7,7 +7,7 @@ import abiDecoder from 'abi-decoder';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
 import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
-import { addContracts, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
+import { addContracts, deleteContract, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
 import addresses from "../contracts/address.json";
 const { weth } = addresses;
 
@@ -244,22 +244,36 @@ export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
     setContractsData([]);
     setContractNames([]);
     setContractSymbols([]);
-    data?.subwallets?.forEach(async (item) => {
+    for (let i = 0; i < data?.subwallets?.length; i++) {
       console.log(data?.subwallets);
-      const contractData = await getContractData(item.public_key);
-      // console.log(contractData);
+      const contractData = await getContractData(data.subwallets[i].public_key);
       contractData.forEach(async (item) => {
-        setIsBotRunning(p => [...p, false]);
-        setSubscriptions(p => [...p, null]);
+        setIsBotRunning([...isBotRunning, false]);
+        setSubscriptions([...subscriptions, null]);
         const { name, symbol } = await getTokenData(item.addr);
-        setContractNames(p => [...p, name]);
-        setContractSymbols(p => [...p, symbol]);
+        setContractNames([...contractNames, name]);
+        setContractSymbols([...contractSymbols, symbol]);
       })
-      // console.log("item: ", item);
       const length = contractsData.length;
       console.log(length)
       setContractsData([...contractsData, ...contractData]);
-    });
+    }
+    // data?.subwallets?.forEach(async (item) => {
+    //   console.log(data?.subwallets);
+    //   const contractData = await getContractData(item.public_key);
+    //   // console.log(contractData);
+    //   contractData.forEach(async (item) => {
+    //     setIsBotRunning(p => [...p, false]);
+    //     setSubscriptions(p => [...p, null]);
+    //     const { name, symbol } = await getTokenData(item.addr);
+    //     setContractNames(p => [...p, name]);
+    //     setContractSymbols(p => [...p, symbol]);
+    //   })
+    //   // console.log("item: ", item);
+    //   const length = contractsData.length;
+    //   console.log(length)
+    //   setContractsData([...contractsData, ...contractData]);
+    // });
   }
 
   useEffect(() => {
@@ -324,7 +338,8 @@ export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
                 <div className="header">Sell (ETH)</div>
                 <div className="header">Profit Generated (ETH)</div>
                 <div className="header">Total Gas Spent (ETH)</div>
-                <div className="header">Action</div>
+                <div className="header">Start/Stop</div>
+                <div className="header">Delete</div>
                 {
                   contractsData?.map((contract, index) => contract.subwallet_id === item._id && (
                     <>
@@ -340,6 +355,13 @@ export default function Dashboard({ ethAmount, ethLimit, accountEmail }) {
                           isBotRunning[index]
                             ? <button onClick={() => stopBot(index)}>Stop</button>
                             : <button onClick={() => startBot(index, contract.addr, item.public_key, item.private_key)}>Start</button>
+                        }
+                      </div>
+                      <div className="element">
+                        {
+                          isBotRunning[index]
+                            ? <button>Running</button>
+                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData() }}>Delete</button>
                         }
                       </div>
                     </>
