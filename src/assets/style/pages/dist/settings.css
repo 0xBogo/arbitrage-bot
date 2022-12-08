@@ -67,7 +67,7 @@
   max-height: 230px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(6, auto);
   grid-column-gap: 1px;
   grid-row-gap: 1px;
   font-size: 12px;

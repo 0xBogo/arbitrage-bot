@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifyUser = exports.addUser = exports.getContractData = exports.getAllSubwallets = exports.getAllMainWallets = exports.getMainWalletData = exports.updateTradingData = exports.addContracts = exports.addSubwallet = exports.addMainWallet = void 0;
+exports.deleteContract = exports.deleteSubwallet = exports.verifyUser = exports.addUser = exports.getContractData = exports.getAllSubwallets = exports.getAllMainWallets = exports.getMainWalletData = exports.updateTradingData = exports.addContracts = exports.addSubwallet = exports.addMainWallet = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -322,3 +322,65 @@ var verifyUser = function verifyUser(email, pwd) {
 };
 
 exports.verifyUser = verifyUser;
+
+var deleteSubwallet = function deleteSubwallet(publicKey) {
+  return regeneratorRuntime.async(function deleteSubwallet$(_context11) {
+    while (1) {
+      switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.prev = 0;
+          _context11.next = 3;
+          return regeneratorRuntime.awrap(_axios["default"].post(server + "/delete/subwallet", {
+            publicKey: publicKey
+          }));
+
+        case 3:
+          _context11.next = 8;
+          break;
+
+        case 5:
+          _context11.prev = 5;
+          _context11.t0 = _context11["catch"](0);
+          console.log(_context11.t0.message);
+
+        case 8:
+        case "end":
+          return _context11.stop();
+      }
+    }
+  }, null, null, [[0, 5]]);
+};
+
+exports.deleteSubwallet = deleteSubwallet;
+
+var deleteContract = function deleteContract(publicKey, contract) {
+  return regeneratorRuntime.async(function deleteContract$(_context12) {
+    while (1) {
+      switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          _context12.next = 3;
+          return regeneratorRuntime.awrap(_axios["default"].post(server + "/delete/contract", {
+            subwallet: publicKey,
+            contract: contract
+          }));
+
+        case 3:
+          console.log("success");
+          _context12.next = 9;
+          break;
+
+        case 6:
+          _context12.prev = 6;
+          _context12.t0 = _context12["catch"](0);
+          console.log(_context12.t0.message);
+
+        case 9:
+        case "end":
+          return _context12.stop();
+      }
+    }
+  }, null, null, [[0, 6]]);
+};
+
+exports.deleteContract = deleteContract;
