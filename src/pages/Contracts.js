@@ -4,7 +4,7 @@ import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react';
 import { detectSwap, buyTokens, sellTokens, getUniswapContract, getPairAddress } from '../utils/contractFunctions';
-import { GET_ALL_TOKENS, GET_TOKEN, GRAPHQL_URL } from '../utils/constants';
+import { GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
 import { addContracts, getMainWalletData } from '../utils/api';
 const { weth } = addresses;
@@ -16,35 +16,17 @@ export default function Contracts() {
   const [mainWalletData, setMainWalletData] = useState(null);
   const [tokenData, setTokenData] = useState([]);
   const [selectedToken, setSelectedToken] = useState("");
-  const [selectedTokenData, setSelectedTokenData] = useState(null);
-  const [pairData, setPairData] = useState([]);
+  // const [selectedTokenData, setSelectedTokenData] = useState(null);
+  // const [pairData, setPairData] = useState([]);
   const [sortOption, setSortOption] = useState("Address");
+  const [filterOption, setFilterOption] = useState("None");
+  const [rawTokenData, setRawTokenData] = useState([]);
   const [subwallet, setSubwallet] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-
-  const getSelectedTokenData = async (address) => {
-    // console.log(GET_TOKEN(address));
-    try {
-      let results = await fetch(GRAPHQL_URL, {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          query: GET_TOKEN(address)
-        })
-      })
-      let characters = await results.json();
-      setSelectedTokenData(characters.data.token);
-      setSelectedToken(characters.data.token.id);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   const onSelect = async (address) => {
     setSelectedToken(address);
@@ -112,8 +94,8 @@ export default function Contracts() {
 
   const sortByPrice = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.tokenDayData[1]?.priceUSD;
-      const bb = b.tokenDayData[1]?.priceUSD;
+      const aa = a.priceUSD;
+      const bb = b.priceUSD;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
@@ -122,12 +104,23 @@ export default function Contracts() {
 
   const sortByVolume = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.tradeVolumeUSD;
-      const bb = b.tradeVolumeUSD;
+      const aa = a.dailyVolumeUSD;
+      const bb = b.dailyVolumeUSD;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
     return tokens;
+  }
+
+  const filtByMCap = (tokens) => {
+    const result = tokens.filter(token => token.mcap > 100000 && token.mcap < 1000000);
+    console.log(result);
+    return result;
+  }
+
+  const filtByVolume = (tokens) => {
+    const result = tokens.filter(token => token.dailyVolumeUSD > 100000);
+    return result;
   }
 
   useEffect(() => {
@@ -147,17 +140,17 @@ export default function Contracts() {
             query: GET_ALL_TOKENS
           })
         })
-        let characters = await results.json();
-        // setTokenData(characters.data.tokens);
+        const characters = await results.json();
+        const data = characters.data.tokens;
         let tokenData = [];
-        for (let i = 0; i < characters.data.tokens.length; i++) {
-          if (!characters.data.tokens[i].tokenDayData[1]?.priceUSD) continue;
-          if (!characters.data.tokens[i].tokenDayData[1]) continue;
-          // console.log(characters.data.tokens[i].id);
-          const pairAddress = await getPairAddress(characters.data.tokens[i].id);
-          const mcap = characters.data.tokens[i].totalSupply * characters.data.tokens[i].tokenDayData[1]?.priceUSD;
-          // console.log(tokenData);
-          tokenData = [...tokenData, { ...characters.data.tokens[i], pair: pairAddress, mcap: mcap }];
+        for (let i = 0; i < data.length; i++) {
+          if(data[i].tokenDayData.length === 0) continue;
+          if(data[i].pairBase.length === 0) continue;
+          const mcap = data[i].totalSupply * data[i].tokenDayData[0].priceUSD;
+          console.log(tokenData);
+          tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
+          console.log(tokenData);
+          setRawTokenData(tokenData);
           setTokenData(tokenData);
         }
       } catch (err) {
@@ -168,7 +161,6 @@ export default function Contracts() {
   }, [])
 
   useEffect(() => {
-    // if (!tokenData) return;
     switch (sortOption) {
       case "Address": {
         setTokenData(tokenData => [...sortByAddress(false, tokenData)]);
@@ -229,6 +221,24 @@ export default function Contracts() {
     }
   }, [sortOption])
 
+  useEffect(() => {
+    console.log(filterOption);
+    switch (filterOption) {
+      case "None": {
+        setTokenData([...rawTokenData]);
+        break;
+      }
+      case "MCap": {
+        setTokenData(tokenData => [...filtByMCap(tokenData)]);
+        break;
+      }
+      case "Volume": {
+        setTokenData(tokenData => [...filtByVolume(tokenData)]);
+        break;
+      }
+    }
+  }, [filterOption])
+
   return (
     <div id="contracts">
       <div className="title">
@@ -256,23 +266,12 @@ export default function Contracts() {
             <option value="24h Volume(reverse)">24h Volume(reverse)</option>
           </select>
           <div className="title">
-            Filter
+            Filter by
           </div>
-          <select onChange={e => setSortOption(e.target.value)}>
-            {/* <option value="Address">Address</option>
-            <option value="Address(reverse)">Address(reverse)</option>
-            <option value="Name">Name</option>
-            <option value="Name(reverse)">Name(reverse)</option>
-            <option value="Symbol">Symbol</option>
-            <option value="Symbol(reverse)">Symbol(reverse)</option>
-            <option value="Liquidity">Liquidity</option>
-            <option value="Liquidity(reverse)">Liquidity(reverse)</option>
+          <select onChange={e => setFilterOption(e.target.value)}>
+            <option value="None">None</option>
             <option value="MCap">MCap</option>
-            <option value="MCap(reverse)">MCap(reverse)</option>
-            <option value="Price">Price</option>
-            <option value="Price(reverse)">Price(reverse)</option>
-            <option value="24h Volume">24h Volume</option>
-            <option value="24h Volume(reverse)">24h Volume(reverse)</option> */}
+            <option value="Volume">Volume</option>
           </select>
         </div>
         <div className="contract-list">
@@ -292,11 +291,11 @@ export default function Contracts() {
                 <div className="element">{item.name}</div>
                 <div className="element">{item.symbol}</div>
                 <a className="element" >{item.id}</a>
-                <a className="element" href={`https://dexscreener.com/ethereum/${pairData[index]}`} target="_blank">WETH/{item.symbol}</a>
+                <a className="element" href={`https://dexscreener.com/ethereum/${item.pairBase[0].id}`} target="_blank">WETH/{item.symbol}</a>
                 <div className="element">{item.totalLiquidity}</div>
                 <div className="element">{item.mcap}</div>
-                <div className="element">{item.tokenDayData[1]?.priceUSD}</div>
-                <div className="element">{item.tradeVolumeUSD}</div>
+                <div className="element">{item.priceUSD}</div>
+                <div className="element">{item.dailyVolumeUSD}</div>
                 <div className="element">0% / 0%</div>
                 <div className="element">
                   <button onClick={() => { onSelect(item.id) }}>Select</button>
