@@ -257,6 +257,7 @@ export default function Dashboard({ ethAmount, ethLimit }) {
       const length = contractsData.length;
       console.log(length)
       setContractsData([...contractsData, ...contractData]);
+      setContractsData(contractsData => [...contractsData]);
     }
     // data?.subwallets?.forEach(async (item) => {
     //   console.log(data?.subwallets);
@@ -278,7 +279,7 @@ export default function Dashboard({ ethAmount, ethLimit }) {
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    // if (!email) window.location.href = "/login";
+    if (!email) window.location.href = "/login";
   }, [])
 
   useEffect(() => {
@@ -362,7 +363,7 @@ export default function Dashboard({ ethAmount, ethLimit }) {
                         {
                           isBotRunning[index]
                             ? <button>Running</button>
-                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData() }}>Delete</button>
+                            : <button onClick={ () => { deleteContract(item.public_key, contract.addr); window.location.reload() }}>Delete</button>
                         }
                       </div>
                     </>

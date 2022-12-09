@@ -132,7 +132,7 @@ export default function Contracts() {
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    // if (!email) window.location.href = "/login";
+    if (!email) window.location.href = "/login";
   }, [])
 
   useEffect(() => {
@@ -152,6 +152,7 @@ export default function Contracts() {
         let tokenData = [];
         for (let i = 0; i < characters.data.tokens.length; i++) {
           if (!characters.data.tokens[i].tokenDayData[1]?.priceUSD) continue;
+          if (!characters.data.tokens[i].tokenDayData[1]) continue;
           // console.log(characters.data.tokens[i].id);
           const pairAddress = await getPairAddress(characters.data.tokens[i].id);
           const mcap = characters.data.tokens[i].totalSupply * characters.data.tokens[i].tokenDayData[1]?.priceUSD;

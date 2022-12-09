@@ -38,7 +38,6 @@ export default function Login() {
         }
         case 2: {
           sessionStorage.setItem("email", email);
-          // setAccountEmail(email);
           window.location.href = "/";
         }
       }

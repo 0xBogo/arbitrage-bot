@@ -23,25 +23,27 @@ var addMainWallet = function addMainWallet(publicKey) {
           }));
 
         case 3:
-          _context.next = 8;
+          console.log("success");
+          _context.next = 9;
           break;
 
-        case 5:
-          _context.prev = 5;
+        case 6:
+          _context.prev = 6;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0.message);
 
-        case 8:
+        case 9:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.addMainWallet = addMainWallet;
 
 var addSubwallet = function addSubwallet(mainWallet, publicKey, privateKey) {
+  var result;
   return regeneratorRuntime.async(function addSubwallet$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -55,20 +57,22 @@ var addSubwallet = function addSubwallet(mainWallet, publicKey, privateKey) {
           }));
 
         case 3:
-          _context2.next = 8;
+          result = _context2.sent;
+          console.log(result);
+          _context2.next = 10;
           break;
 
-        case 5:
-          _context2.prev = 5;
+        case 7:
+          _context2.prev = 7;
           _context2.t0 = _context2["catch"](0);
           console.log(_context2.t0.message);
 
-        case 8:
+        case 10:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 7]]);
 };
 
 exports.addSubwallet = addSubwallet;
@@ -121,20 +125,21 @@ var updateTradingData = function updateTradingData(subwallet, contract, buy, sel
           }));
 
         case 3:
-          _context4.next = 8;
+          console.log("success");
+          _context4.next = 9;
           break;
 
-        case 5:
-          _context4.prev = 5;
+        case 6:
+          _context4.prev = 6;
           _context4.t0 = _context4["catch"](0);
           console.log(_context4.t0.message);
 
-        case 8:
+        case 9:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.updateTradingData = updateTradingData;
@@ -335,20 +340,21 @@ var deleteSubwallet = function deleteSubwallet(publicKey) {
           }));
 
         case 3:
-          _context11.next = 8;
+          console.log("success");
+          _context11.next = 9;
           break;
 
-        case 5:
-          _context11.prev = 5;
+        case 6:
+          _context11.prev = 6;
           _context11.t0 = _context11["catch"](0);
           console.log(_context11.t0.message);
 
-        case 8:
+        case 9:
         case "end":
           return _context11.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.deleteSubwallet = deleteSubwallet;
