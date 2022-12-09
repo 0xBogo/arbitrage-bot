@@ -83,7 +83,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    // if (!email) window.location.href = "/login";
+    if (!email) window.location.href = "/login";
   }, [])
 
   useEffect(() => {
