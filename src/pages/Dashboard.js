@@ -278,7 +278,7 @@ export default function Dashboard({ ethAmount, ethLimit }) {
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    if (!email) window.location.href = "/login";
+    // if (!email) window.location.href = "/login";
   }, [])
 
   useEffect(() => {
