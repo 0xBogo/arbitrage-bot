@@ -120,14 +120,23 @@ export default function Contracts() {
     return tokens;
   }
 
+  const sortByVolume = (isReverse, tokens) => {
+    tokens.sort((a, b) => {
+      const aa = a.tradeVolumeUSD;
+      const bb = b.tradeVolumeUSD;
+      return aa - bb;
+    });
+    if (isReverse) tokens = tokens.reverse();
+    return tokens;
+  }
+
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    if (!email) window.location.href = "/login";
+    // if (!email) window.location.href = "/login";
   }, [])
 
   useEffect(() => {
     const getTokenData = async () => {
-      console.log("first")
       try {
         let results = await fetch(GRAPHQL_URL, {
           method: 'POST',
@@ -142,11 +151,11 @@ export default function Contracts() {
         // setTokenData(characters.data.tokens);
         let tokenData = [];
         for (let i = 0; i < characters.data.tokens.length; i++) {
-          if(!characters.data.tokens[i].tokenDayData[1]?.priceUSD) continue;
+          if (!characters.data.tokens[i].tokenDayData[1]?.priceUSD) continue;
           // console.log(characters.data.tokens[i].id);
           const pairAddress = await getPairAddress(characters.data.tokens[i].id);
           const mcap = characters.data.tokens[i].totalSupply * characters.data.tokens[i].tokenDayData[1]?.priceUSD;
-          console.log(tokenData);
+          // console.log(tokenData);
           tokenData = [...tokenData, { ...characters.data.tokens[i], pair: pairAddress, mcap: mcap }];
           setTokenData(tokenData);
         }
@@ -158,54 +167,62 @@ export default function Contracts() {
   }, [])
 
   useEffect(() => {
-    if (!tokenData) return;
+    // if (!tokenData) return;
     switch (sortOption) {
       case "Address": {
-        setTokenData(tokenData => sortByAddress(false, tokenData));
+        setTokenData(tokenData => [...sortByAddress(false, tokenData)]);
         break;
       }
       case "Address(reverse)": {
-        setTokenData(tokenData => sortByAddress(true, tokenData));
+        setTokenData(tokenData => [...sortByAddress(true, tokenData)]);
         break;
       }
       case "Name": {
-        setTokenData(tokenData => sortByName(false, tokenData));
+        setTokenData(tokenData => [...sortByName(false, tokenData)]);
         break;
       }
       case "Name(reverse)": {
-        setTokenData(tokenData => sortByName(true, tokenData));
+        setTokenData(tokenData => [...sortByName(true, tokenData)]);
         break;
       }
       case "Symbol": {
-        setTokenData(tokenData => sortBySymbol(false, tokenData));
+        setTokenData(tokenData => [...sortBySymbol(false, tokenData)]);
         break;
       }
       case "Symbol(reverse)": {
-        setTokenData(tokenData => sortBySymbol(true, tokenData));
+        setTokenData(tokenData => [...sortBySymbol(true, tokenData)]);
         break;
       }
       case "Liquidity": {
-        setTokenData(tokenData => sortByLiquidity(false, tokenData));
+        setTokenData(tokenData => [...sortByLiquidity(false, tokenData)]);
         break;
       }
       case "Liquidity(reverse)": {
-        setTokenData(tokenData => sortByLiquidity(true, tokenData));
+        setTokenData(tokenData => [...sortByLiquidity(true, tokenData)]);
         break;
       }
       case "MCap": {
-        setTokenData(tokenData => sortByMCap(false, tokenData));
+        setTokenData(tokenData => [...sortByMCap(false, tokenData)]);
         break;
       }
       case "MCap(reverse)": {
-        setTokenData(tokenData => sortByMCap(true, tokenData));
+        setTokenData(tokenData => [...sortByMCap(true, tokenData)]);
         break;
       }
       case "Price": {
-        setTokenData(tokenData => sortByPrice(false, tokenData));
+        setTokenData(tokenData => [...sortByPrice(false, tokenData)]);
         break;
       }
       case "Price(reverse)": {
-        setTokenData(tokenData => sortByPrice(true, tokenData));
+        setTokenData(tokenData => [...sortByPrice(true, tokenData)]);
+        break;
+      }
+      case "24h Volume": {
+        setTokenData(tokenData => [...sortByVolume(false, tokenData)]);
+        break;
+      }
+      case "24h Volume(reverse)": {
+        setTokenData(tokenData => [...sortByVolume(true, tokenData)]);
         break;
       }
     }
@@ -234,6 +251,27 @@ export default function Contracts() {
             <option value="MCap(reverse)">MCap(reverse)</option>
             <option value="Price">Price</option>
             <option value="Price(reverse)">Price(reverse)</option>
+            <option value="24h Volume">24h Volume</option>
+            <option value="24h Volume(reverse)">24h Volume(reverse)</option>
+          </select>
+          <div className="title">
+            Filter
+          </div>
+          <select onChange={e => setSortOption(e.target.value)}>
+            {/* <option value="Address">Address</option>
+            <option value="Address(reverse)">Address(reverse)</option>
+            <option value="Name">Name</option>
+            <option value="Name(reverse)">Name(reverse)</option>
+            <option value="Symbol">Symbol</option>
+            <option value="Symbol(reverse)">Symbol(reverse)</option>
+            <option value="Liquidity">Liquidity</option>
+            <option value="Liquidity(reverse)">Liquidity(reverse)</option>
+            <option value="MCap">MCap</option>
+            <option value="MCap(reverse)">MCap(reverse)</option>
+            <option value="Price">Price</option>
+            <option value="Price(reverse)">Price(reverse)</option>
+            <option value="24h Volume">24h Volume</option>
+            <option value="24h Volume(reverse)">24h Volume(reverse)</option> */}
           </select>
         </div>
         <div className="contract-list">
@@ -260,7 +298,7 @@ export default function Contracts() {
                 <div className="element">{item.tradeVolumeUSD}</div>
                 <div className="element">0% / 0%</div>
                 <div className="element">
-                  <button onClick={() => {onSelect(item.id)}}>Select</button>
+                  <button onClick={() => { onSelect(item.id) }}>Select</button>
                 </div>
               </>
             ))

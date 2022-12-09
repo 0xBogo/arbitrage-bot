@@ -23,7 +23,7 @@ export default function Stats() {
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
-    if (!email) window.location.href = "/login";
+    // if (!email) window.location.href = "/login";
   }, [])
 
   const getData = async () => {
