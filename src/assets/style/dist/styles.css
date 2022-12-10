@@ -1,0 +1,1014 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#header {
+  position: fixed;
+  top: 0;
+  height: 64px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  backdrop-filter: blur(12px);
+  z-index: 99;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+#header .left {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-left: 30px;
+}
+#header .left .logo {
+  width: auto;
+  padding: 0 18px;
+  height: 64px;
+}
+#header .left .logo img {
+  height: 100%;
+}
+#header .left .nav-item {
+  width: auto;
+  height: 100%;
+  padding: 0 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.6;
+  position: relative;
+  transition: all 1s;
+  cursor: pointer;
+}
+#header .left .nav-item .page-links {
+  display: none;
+}
+#header .left .nav-item:hover {
+  opacity: 1;
+}
+#header .left .nav-item:hover .page-links {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #262931aa;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+#header .left .nav-item:hover .page-links a {
+  padding-left: 12px;
+  width: 180px;
+  line-height: 48px;
+  opacity: 0.6;
+  transition: all 1s;
+}
+#header .left .nav-item:hover .page-links a:hover {
+  opacity: 1;
+  background: #00000020;
+}
+#header .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 30px;
+}
+#header .right .create-btn {
+  padding: 0 24px;
+  background-image: linear-gradient(90deg, #ea63d7 0, #6060ef 50%, #76d5fa);
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 32px;
+  transition: background-position 0.5s;
+  background-size: 200%;
+  background-position: 0%;
+}
+#header .right .create-btn:hover {
+  background-position: 100%;
+}
+#header .right .change-network {
+  position: relative;
+}
+#header .right .change-network .connected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  background-color: #004EDA;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+#header .right .change-network .connected:hover {
+  background-color: #fff;
+  color: #000;
+}
+#header .right .change-network .connected img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .change-network .network-lists {
+  display: none;
+}
+#header .right .change-network:hover .network-lists {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 32px;
+  left: 0;
+  width: 100%;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+}
+#header .right .change-network:hover .network-lists .network {
+  padding-left: 12px;
+  line-height: 36px;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#header .right .change-network:hover .network-lists .network img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .change-network:hover .network-lists .network:hover {
+  background: #00000020;
+}
+#header .right .connect {
+  padding: 0 30px;
+  margin-left: 12px;
+  position: relative;
+}
+#header .right .connect .network-lists {
+  display: none;
+}
+#header .right .connect:hover .network-lists {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 24px;
+  right: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+}
+#header .right .connect:hover .network-lists .network {
+  padding-left: 12px;
+  line-height: 36px;
+  transition: all 0.5s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#header .right .connect:hover .network-lists .network img {
+  width: 1.5em;
+  height: 1.5em;
+}
+#header .right .connect:hover .network-lists .network:hover {
+  background: #00000020;
+}
+#header .right .connect:hover .network-lists .disconnect-btn {
+  margin-inline: auto;
+  padding: 0 24px;
+  width: 160px;
+  border-radius: 50vmax;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+}
+#header .right .connect:hover .network-lists .disconnect-btn:hover {
+  color: #fff;
+  background-color: #000;
+}
+#header .right .connect .connect-btn {
+  padding: 0 24px;
+  border-radius: 4px;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: background-color 1s;
+}
+#header .right .connect .connect-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+#header .right .user-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+#header .right .user-btn img {
+  width: 100%;
+  height: 100%;
+}
+#header .right .user-btn .account-detail {
+  display: none;
+}
+#header .right .user-btn:hover .account-detail {
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 #26293155;
+  position: absolute;
+  top: 36px;
+  right: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+#header .right .user-btn:hover .account-detail .email {
+  line-height: 36px;
+}
+#header .right .user-btn:hover .account-detail a {
+  margin-inline: auto;
+  padding: 0 24px;
+  width: 200px;
+  border-radius: 50vmax;
+  color: #000;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #000 solid;
+  transition: all 0.5s;
+}
+#header .right .user-btn:hover .account-detail a:hover {
+  color: #fff;
+  background-color: #000;
+}
+
+.account-modal {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+#sidebar {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 240px;
+  height: calc(100% - 64px);
+  background: #fff;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: 0.02em;
+}
+#sidebar .tab-container {
+  margin-top: 8px;
+}
+#sidebar .tab-container .tab, #sidebar .tab-container .tab-active {
+  padding-left: 30px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+#sidebar .tab-container .tab:hover, #sidebar .tab-container .tab-active:hover {
+  background-color: #004EDA33;
+}
+#sidebar .tab-container .tab img, #sidebar .tab-container .tab-active img {
+  width: 24px;
+  height: 24px;
+}
+#sidebar .tab-container .tab-active {
+  background-color: #004EDA;
+  color: #fff;
+}
+#sidebar .tab-container .tab-active:hover {
+  background-color: #004EDA;
+}
+
+#dashboard {
+  padding: 32px 36px;
+}
+#dashboard .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+}
+#dashboard .main-wallet-section {
+  margin-top: 32px;
+}
+#dashboard .main-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .main-wallet-section .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#dashboard .main-wallet-section .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#dashboard .main-wallet-section .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#dashboard .main-wallet-section .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#dashboard .subwallet-section {
+  margin-top: 32px;
+}
+#dashboard .subwallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .subwallet-section .subwallet {
+  margin-top: 12px;
+}
+#dashboard .subwallet-section .subwallet .subtitle {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+}
+#dashboard .subwallet-section .subwallet .contracts-details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#dashboard .subwallet-section .subwallet .contracts-details .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#dashboard .subwallet-section .subwallet .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#dashboard .subwallet-section .subwallet .btn-container .start-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#dashboard .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#dashboard .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#dashboard .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#dashboard .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#dashboard .wallet-stats-section, #dashboard #stats .contract-stats-section, #stats #dashboard .contract-stats-section {
+  margin-top: 32px;
+}
+#dashboard .wallet-stats-section .title, #dashboard #stats .contract-stats-section .title, #stats #dashboard .contract-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#dashboard .wallet-stats-section .container, #dashboard #stats .contract-stats-section .container, #stats #dashboard .contract-stats-section .container {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+}
+#dashboard .wallet-stats-section .container .filter, #dashboard #stats .contract-stats-section .container .filter, #stats #dashboard .contract-stats-section .container .filter {
+  text-align: right;
+}
+#dashboard .wallet-stats-section .container .filter .title, #dashboard #stats .contract-stats-section .container .filter .title, #stats #dashboard .contract-stats-section .container .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#dashboard .wallet-stats-section .container .filter select, #dashboard #stats .contract-stats-section .container .filter select, #stats #dashboard .contract-stats-section .container .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#dashboard .wallet-stats-section .container .stat-list, #dashboard #stats .contract-stats-section .container .stat-list, #stats #dashboard .contract-stats-section .container .stat-list {
+  height: 216px;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-column-gap: 1px;
+  margin-top: 24px;
+  overflow-y: auto;
+}
+#dashboard .wallet-stats-section .container .stat-list .header, #dashboard #stats .contract-stats-section .container .stat-list .header, #stats #dashboard .contract-stats-section .container .stat-list .header {
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+}
+#dashboard .wallet-stats-section .container .stat-list .element, #dashboard #stats .contract-stats-section .container .stat-list .element, #stats #dashboard .contract-stats-section .container .stat-list .element {
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#dashboard .wallet-stats-section .container .stat-list .element button, #dashboard #stats .contract-stats-section .container .stat-list .element button, #stats #dashboard .contract-stats-section .container .stat-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+
+#contracts {
+  padding: 32px 36px;
+}
+#contracts .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#contracts .contract-list-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#contracts .contract-list-section .filter {
+  text-align: right;
+}
+#contracts .contract-list-section .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-left: 24px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#contracts .contract-list-section .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#contracts .contract-list-section .contract-list {
+  max-height: 720px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#contracts .contract-list-section .contract-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#contracts .contract-list-section .contract-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#contracts .contract-list-section .contract-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#contracts .contract-list-section .loading {
+  margin-top: 12px;
+  font-size: 24px;
+  text-align: center;
+}
+#contracts .contract-wallet-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#contracts .contract-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#contracts .contract-wallet-section .contract-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#contracts .contract-wallet-section .contract-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#contracts .contract-wallet-section .contract-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#contracts .contract-wallet-section .contract-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#contracts .contract-wallet-section .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#contracts .contract-wallet-section .btn-container .start-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+
+#stats {
+  padding: 32px 36px;
+}
+#stats .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+}
+#stats .total-stats-section {
+  margin-top: 32px;
+}
+#stats .total-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#stats .total-stats-section .basic {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 32px;
+  margin-top: 32px;
+}
+#stats .total-stats-section .basic .detail-item {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#stats .total-stats-section .basic .detail-item .title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #5A5A5F;
+}
+#stats .total-stats-section .basic .detail-item .value {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #004EDA;
+}
+#stats .wallet-stats-section, #stats .contract-stats-section {
+  margin-top: 32px;
+}
+#stats .wallet-stats-section .title, #stats .contract-stats-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#stats .wallet-stats-section .container, #stats .contract-stats-section .container {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+}
+#stats .wallet-stats-section .container .filter, #stats .contract-stats-section .container .filter {
+  text-align: right;
+}
+#stats .wallet-stats-section .container .filter .title, #stats .contract-stats-section .container .filter .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-right: 24px;
+  display: inline-block;
+}
+#stats .wallet-stats-section .container .filter select, #stats .contract-stats-section .container .filter select {
+  width: 240px;
+  height: 32px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#stats .wallet-stats-section .container .stat-list, #stats .contract-stats-section .container .stat-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#stats .wallet-stats-section .container .stat-list .header, #stats .contract-stats-section .container .stat-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#stats .wallet-stats-section .container .stat-list .element, #stats .contract-stats-section .container .stat-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#stats .wallet-stats-section .container .stat-list .element button, #stats .contract-stats-section .container .stat-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#stats .contract-stats-section .container .stat-list {
+  grid-template-columns: repeat(7, auto);
+}
+
+#settings {
+  padding: 32px 36px;
+}
+#settings .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 66px;
+  margin-bottom: 32px;
+}
+#settings .setting-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+#settings .setting-item .left .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  margin-bottom: 12px;
+}
+#settings .setting-item .left .description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 12px;
+}
+#settings .setting-item .right input {
+  width: 240px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+#settings .setting-item .right button {
+  margin-left: 24px;
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#settings .wallets .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#settings .wallets .my-wallet-section {
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+#settings .wallets .my-wallet-section .title {
+  color: #004EDA;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 48px;
+}
+#settings .wallets .my-wallet-section .wallets-list {
+  max-height: 230px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 24px;
+  overflow-y: auto;
+  text-align: center;
+}
+#settings .wallets .my-wallet-section .wallets-list .header {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #004EDA;
+  color: #fff;
+  padding: 6px 12px;
+}
+#settings .wallets .my-wallet-section .wallets-list .element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background: #E6E6EB;
+}
+#settings .wallets .my-wallet-section .wallets-list .element button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+#settings .wallets .my-wallet-section .btn-container {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+#settings .wallets .my-wallet-section .btn-container .add-btn {
+  padding: 6px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+
+.log-layout {
+  width: 100%;
+  min-height: 100vh;
+  background: #004EDA;
+  font-family: "Poppins", sans-serif;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+}
+.log-layout .left-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.log-layout .right-section {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #5A5A5F;
+}
+.log-layout .right-section .logup .title {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 48px;
+  margin-bottom: 36px;
+}
+.log-layout .right-section .logup .input {
+  margin-bottom: 24px;
+}
+.log-layout .right-section .logup .input .input-title {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  margin-bottom: 8px;
+}
+.log-layout .right-section .logup .input input {
+  width: 352px;
+  height: 56px;
+  border: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+.log-layout .right-section .logup .input input:focus {
+  outline: none;
+  border: 1px solid #36363B;
+}
+.log-layout .right-section .logup .input .warning {
+  color: #cc3366;
+}
+.log-layout .right-section .logup .check {
+  display: flex;
+  width: 352px;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.log-layout .right-section .logup .check span {
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+}
+.log-layout .right-section .logup button {
+  width: 352px;
+  height: 56px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  color: #fff;
+}
+.log-layout .right-section .logup .already-created {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  margin-top: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s;
+  word-break: break-word !important;
+}
+
+body {
+  color: #5A5A5F;
+  background: #f2f2f8 !important;
+}
+
+a {
+  text-decoration: unset;
+  color: unset;
+}
+a:hover {
+  opacity: 0.6;
+}
+
+button {
+  border: unset;
+  cursor: pointer;
+}
+button:hover {
+  opacity: 0.8;
+}
+button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.page-content {
+  margin-left: 240px;
+  margin-top: 64px;
+  width: calc(100% - 240px);
+  min-height: calc(100vh - 64px);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.font-blue {
+  color: #004EDA;
+}

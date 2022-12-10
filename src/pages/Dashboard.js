@@ -70,7 +70,6 @@ export default function Dashboard({ ethAmount, ethLimit }) {
       .on("data", function (txHash) {
         if (flag[txHash]) return;
         flag[txHash] = true;
-        // console.log(flag);
         console.log(txHash);
         getBalance(publicKey).then(async (balance) => {
           if (balance > ethLimit * 1e18) {
@@ -99,7 +98,6 @@ export default function Dashboard({ ethAmount, ethLimit }) {
               if (tx) {
                 const wallet = { publicKey: publicKey, privateKey: privateKey };
                 const swapInput = await detectSwap(tx, tokenAddress);
-                // console.log(swapInput);
                 if (swapInput) {
                   console.log(tx);
                   console.log(swapInput);
@@ -245,7 +243,6 @@ export default function Dashboard({ ethAmount, ethLimit }) {
     setContractNames([]);
     setContractSymbols([]);
     for (let i = 0; i < data?.subwallets?.length; i++) {
-      console.log(data?.subwallets);
       const contractData = await getContractData(data.subwallets[i].public_key);
       contractData.forEach(async (item) => {
         setIsBotRunning([...isBotRunning, false]);
@@ -254,27 +251,9 @@ export default function Dashboard({ ethAmount, ethLimit }) {
         setContractNames([...contractNames, name]);
         setContractSymbols([...contractSymbols, symbol]);
       })
-      const length = contractsData.length;
-      console.log(length)
       setContractsData([...contractsData, ...contractData]);
       setContractsData(contractsData => [...contractsData]);
     }
-    // data?.subwallets?.forEach(async (item) => {
-    //   console.log(data?.subwallets);
-    //   const contractData = await getContractData(item.public_key);
-    //   // console.log(contractData);
-    //   contractData.forEach(async (item) => {
-    //     setIsBotRunning(p => [...p, false]);
-    //     setSubscriptions(p => [...p, null]);
-    //     const { name, symbol } = await getTokenData(item.addr);
-    //     setContractNames(p => [...p, name]);
-    //     setContractSymbols(p => [...p, symbol]);
-    //   })
-    //   // console.log("item: ", item);
-    //   const length = contractsData.length;
-    //   console.log(length)
-    //   setContractsData([...contractsData, ...contractData]);
-    // });
   }
 
   useEffect(() => {
