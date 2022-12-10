@@ -11,8 +11,8 @@ import disabled from "../assets/img/disabled.svg";
 import user from "../assets/img/user.svg";
 
 const chainLogo = {
-    97: bsc,
-    5: eth
+    56: bsc,
+    1: eth
 };
 
 export default function Header() {
@@ -51,11 +51,11 @@ export default function Header() {
                             }
                         </div>
                         <div className="network-lists">
-                            <div className="network" onClick={() => changeNetwork(97)}>
-                                <img src={bsc} />BSC Testnet
+                            <div className="network" onClick={() => changeNetwork(56)}>
+                                <img src={bsc} />BSC Mainnet
                             </div>
-                            <div className="network" onClick={() => changeNetwork(5)}>
-                                <img src={eth} />Goerli Testnet
+                            <div className="network" onClick={() => changeNetwork(1)}>
+                                <img src={eth} />Ethereum Mainnet
                             </div>
                         </div>
                     </div>
@@ -80,6 +80,7 @@ export default function Header() {
                     <img src={user} />
                     <div className="account-detail">
                         <div className="email">{email}</div>
+                        <Divider marginY="6px" />
                         <a href="/login">Log out</a>
                     </div>
                 </div>

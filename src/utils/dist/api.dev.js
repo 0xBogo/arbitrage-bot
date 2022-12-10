@@ -23,21 +23,20 @@ var addMainWallet = function addMainWallet(publicKey) {
           }));
 
         case 3:
-          console.log("success");
-          _context.next = 9;
+          _context.next = 8;
           break;
 
-        case 6:
-          _context.prev = 6;
+        case 5:
+          _context.prev = 5;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0.message);
 
-        case 9:
+        case 8:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 5]]);
 };
 
 exports.addMainWallet = addMainWallet;
@@ -58,21 +57,20 @@ var addSubwallet = function addSubwallet(mainWallet, publicKey, privateKey) {
 
         case 3:
           result = _context2.sent;
-          console.log(result);
-          _context2.next = 10;
+          _context2.next = 9;
           break;
 
-        case 7:
-          _context2.prev = 7;
+        case 6:
+          _context2.prev = 6;
           _context2.t0 = _context2["catch"](0);
           console.log(_context2.t0.message);
 
-        case 10:
+        case 9:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.addSubwallet = addSubwallet;
@@ -90,21 +88,20 @@ var addContracts = function addContracts(subwallet, contracts) {
           }));
 
         case 3:
-          console.log("success");
-          _context3.next = 9;
+          _context3.next = 8;
           break;
 
-        case 6:
-          _context3.prev = 6;
+        case 5:
+          _context3.prev = 5;
           _context3.t0 = _context3["catch"](0);
           console.log(_context3.t0.message);
 
-        case 9:
+        case 8:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 5]]);
 };
 
 exports.addContracts = addContracts;
@@ -125,21 +122,20 @@ var updateTradingData = function updateTradingData(subwallet, contract, buy, sel
           }));
 
         case 3:
-          console.log("success");
-          _context4.next = 9;
+          _context4.next = 8;
           break;
 
-        case 6:
-          _context4.prev = 6;
+        case 5:
+          _context4.prev = 5;
           _context4.t0 = _context4["catch"](0);
           console.log(_context4.t0.message);
 
-        case 9:
+        case 8:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 5]]);
 };
 
 exports.updateTradingData = updateTradingData;
@@ -340,21 +336,20 @@ var deleteSubwallet = function deleteSubwallet(publicKey) {
           }));
 
         case 3:
-          console.log("success");
-          _context11.next = 9;
+          _context11.next = 8;
           break;
 
-        case 6:
-          _context11.prev = 6;
+        case 5:
+          _context11.prev = 5;
           _context11.t0 = _context11["catch"](0);
           console.log(_context11.t0.message);
 
-        case 9:
+        case 8:
         case "end":
           return _context11.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 5]]);
 };
 
 exports.deleteSubwallet = deleteSubwallet;
@@ -372,21 +367,20 @@ var deleteContract = function deleteContract(publicKey, contract) {
           }));
 
         case 3:
-          console.log("success");
-          _context12.next = 9;
+          _context12.next = 8;
           break;
 
-        case 6:
-          _context12.prev = 6;
+        case 5:
+          _context12.prev = 5;
           _context12.t0 = _context12["catch"](0);
           console.log(_context12.t0.message);
 
-        case 9:
+        case 8:
         case "end":
           return _context12.stop();
       }
     }
-  }, null, null, [[0, 6]]);
+  }, null, null, [[0, 5]]);
 };
 
 exports.deleteContract = deleteContract;

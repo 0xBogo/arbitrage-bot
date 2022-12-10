@@ -5,7 +5,7 @@ const server = "https://sandwitchbackend.vercel.app";
 export const addMainWallet = async (publicKey) => {
     try {
         await axios.post(server + "/add/main_wallet", { publicKey: publicKey });
-        console.log("success");
+        // console.log("success");
     } catch (err) {
         console.log(err.message);
     }
@@ -14,7 +14,7 @@ export const addMainWallet = async (publicKey) => {
 export const addSubwallet = async (mainWallet, publicKey, privateKey) => {
     try {
         const result = await axios.post(server + "/add/subwallet", { mainWallet: mainWallet, publicKey: publicKey, privateKey: privateKey });
-        console.log(result);
+        // console.log(result);
     } catch (err) {
         console.log(err.message);
     }
@@ -23,7 +23,7 @@ export const addSubwallet = async (mainWallet, publicKey, privateKey) => {
 export const addContracts = async (subwallet, contracts) => {
     try {
         await axios.post(server + "/add/contracts", { subwallet: subwallet, contracts: contracts });
-        console.log("success");
+        // console.log("success");
     } catch (err) {
         console.log(err.message);
     }
@@ -32,7 +32,7 @@ export const addContracts = async (subwallet, contracts) => {
 export const updateTradingData = async (subwallet, contract, buy, sell, gasSpent) => {
     try {
         await axios.post(server + "/update", { subwallet: subwallet, contract: contract, buy: buy, sell: sell, gasSpent: gasSpent });
-        console.log("success");
+        // console.log("success");
     } catch (err) {
         console.log(err.message);
     }
@@ -101,7 +101,7 @@ export const verifyUser = async (email, pwd) => {
 export const deleteSubwallet = async (publicKey) => {
     try {
         await axios.post(server + "/delete/subwallet", { publicKey: publicKey });
-        console.log("success");
+        // console.log("success");
     } catch (err) {
         console.log(err.message);
     }
@@ -110,7 +110,7 @@ export const deleteSubwallet = async (publicKey) => {
 export const deleteContract = async (publicKey, contract) => {
     try {
         await axios.post(server + "/delete/contract", { subwallet: publicKey, contract: contract});
-        console.log("success");
+        // console.log("success");
     } catch (err) {
         console.log(err.message);
     }

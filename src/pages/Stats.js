@@ -35,7 +35,7 @@ export default function Stats() {
     setContractSymbols([]);
     setWalletBalances([]);
     data?.subwallets?.forEach(async (item) => {
-      console.log(data?.subwallets);
+      // console.log(data?.subwallets);
       const balance = await getBalance(item.public_key);
       const contractData = await getContractData(item.public_key);
       // console.log(contractData);

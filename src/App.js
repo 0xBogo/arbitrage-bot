@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-// import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import './assets/style/styles.scss';
 import Layout from './layouts';
 import Dashboard from './pages/Dashboard';

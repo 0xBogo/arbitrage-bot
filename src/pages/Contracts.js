@@ -114,7 +114,7 @@ export default function Contracts() {
 
   const filtByMCap = (tokens) => {
     const result = tokens.filter(token => token.mcap > 100000 && token.mcap < 1000000);
-    console.log(result);
+    // console.log(result);
     return result;
   }
 
@@ -147,9 +147,9 @@ export default function Contracts() {
           if(data[i].tokenDayData.length === 0) continue;
           if(data[i].pairBase.length === 0) continue;
           const mcap = data[i].totalSupply * data[i].tokenDayData[0].priceUSD;
-          console.log(tokenData);
+          // console.log(tokenData);
           tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
-          console.log(tokenData);
+          // console.log(tokenData);
           setRawTokenData(tokenData);
           setTokenData(tokenData);
         }
@@ -222,7 +222,6 @@ export default function Contracts() {
   }, [sortOption])
 
   useEffect(() => {
-    console.log(filterOption);
     switch (filterOption) {
       case "None": {
         setTokenData([...rawTokenData]);

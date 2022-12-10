@@ -7,7 +7,7 @@ import abiDecoder from 'abi-decoder';
 
 const {weth} = addresses;
 
-const provider = new Web3.providers.WebsocketProvider("wss://goerli.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161");
+const provider = new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161");
 export const web3 = new Web3(provider);
 
 export const getUniswapContract = async () => {
