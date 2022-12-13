@@ -7,10 +7,12 @@ import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, deleteSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
-export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimit }) {
+export default function Settings() {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
+  const [ethAmount, setEthAmount] = useState("0.05");
+  const [ethLimit, setEthLimit] = useState("1");
   const [myWallets, setMyWallets] = useState([]);
   const [balances, setBalances] = useState([]);
   const [privateKey, setPrivateKey] = useState("");
@@ -80,9 +82,38 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
     }
   }
 
+  const saveEthAmount = () => {
+    sessionStorage.setItem("ethAmount", ethAmount);
+    toast({
+      title: 'save success',
+      description: "",
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
+  const saveEthLimit = () => {
+    sessionStorage.setItem("ethLimit", ethLimit);
+    toast({
+      title: 'save success',
+      description: "",
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+  }
+
   useEffect(() => {
     let email = sessionStorage.getItem("email");
     if (!email) window.location.href = "/login";
+  }, [])
+
+  useEffect(() => {
+    let ethAmount = sessionStorage.getItem("ethAmount");
+    let ethLimit = sessionStorage.getItem("ethLimit");
+    if (ethAmount) setEthAmount(ethAmount);
+    if (ethLimit) setEthLimit(ethLimit);
   }, [])
 
   useEffect(() => {
@@ -100,8 +131,8 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
           <div className="description">Adjust ETH amount for each bot</div>
         </div>
         <div className="right">
-          <input value={ethAmount} onChange={e => setEthAmount(e.target.value)} />
-          {/* <button className="default-btn">Set</button> */}
+          <input type="number" value={ethAmount} onChange={e => setEthAmount(e.target.value)} />
+          <button className="default-btn" onClick={saveEthAmount}>Save</button>
         </div>
       </div>
       <div className="setting-item">
@@ -110,8 +141,8 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
           <div className="description">Adjust ETH limit for eth subwallet</div>
         </div>
         <div className="right">
-          <input value={ethLimit} onChange={e => setEthLimit(e.target.value)} />
-          {/* <button className="default-btn">Set</button> */}
+          <input type="number" value={ethLimit} onChange={e => setEthLimit(e.target.value)} />
+          <button className="default-btn" onClick={saveEthLimit}>Save</button>
         </div>
       </div>
       <div className="wallets">

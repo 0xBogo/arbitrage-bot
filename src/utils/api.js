@@ -110,7 +110,7 @@ export const deleteSubwallet = async (publicKey) => {
 export const deleteContract = async (publicKey, contract) => {
     try {
         await axios.post(server + "/delete/contract", { subwallet: publicKey, contract: contract});
-        // console.log("success");
+        console.log("success");
     } catch (err) {
         console.log(err.message);
     }
