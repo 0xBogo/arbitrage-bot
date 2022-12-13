@@ -20,6 +20,8 @@ export default function Contracts() {
   // const [pairData, setPairData] = useState([]);
   const [sortOption, setSortOption] = useState("Address");
   const [filterOption, setFilterOption] = useState("None");
+  const [max, setMax] = useState("");
+  const [min, setMin] = useState("");
   const [rawTokenData, setRawTokenData] = useState([]);
   const [subwallet, setSubwallet] = useState("");
 
@@ -112,14 +114,22 @@ export default function Contracts() {
     return tokens;
   }
 
-  const filtByMCap = (tokens) => {
-    const result = tokens.filter(token => token.mcap > 100000 && token.mcap < 1000000);
+  const filtByMCap = (tokens, max, min) => {
+    const result = tokens.filter(token => {
+      if (max === "") return token.mcap > min;
+      if (min === "") return token.mcap < max;
+      return token.mcap > min && token.mcap < max;
+    });
     // console.log(result);
     return result;
   }
 
-  const filtByVolume = (tokens) => {
-    const result = tokens.filter(token => token.dailyVolumeUSD > 100000);
+  const filtByVolume = (tokens, max, min) => {
+    const result = tokens.filter(token => {
+      if (max === "") return token.dailyVolumeUSD > min;
+      if (min === "") return token.dailyVolumeUSD < max;
+      return token.mcap > min && token.mcap < max;
+    });
     return result;
   }
 
@@ -144,8 +154,8 @@ export default function Contracts() {
         const data = characters.data.tokens;
         let tokenData = [];
         for (let i = 0; i < data.length; i++) {
-          if(data[i].tokenDayData.length === 0) continue;
-          if(data[i].pairBase.length === 0) continue;
+          if (data[i].tokenDayData.length === 0) continue;
+          if (data[i].pairBase.length === 0) continue;
           const mcap = data[i].totalSupply * data[i].tokenDayData[0].priceUSD;
           // console.log(tokenData);
           tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
@@ -221,22 +231,42 @@ export default function Contracts() {
     }
   }, [sortOption])
 
-  useEffect(() => {
+  const runFilter = () => {
     switch (filterOption) {
       case "None": {
         setTokenData([...rawTokenData]);
         break;
       }
       case "MCap": {
-        setTokenData(tokenData => [...filtByMCap(tokenData)]);
+        if (max === "" && min === "") {
+          toast({
+            title: 'Please input limits',
+            description: "",
+            status: 'warning',
+            duration: 2000,
+            isClosable: true
+          })
+          return;
+        }
+        setTokenData(tokenData => [...filtByMCap(tokenData, max, min)]);
         break;
       }
       case "Volume": {
-        setTokenData(tokenData => [...filtByVolume(tokenData)]);
+        if (max === "" && min === "") {
+          toast({
+            title: 'Please input limits',
+            description: "",
+            status: 'warning',
+            duration: 2000,
+            isClosable: true
+          })
+          return;
+        }
+        setTokenData(tokenData => [...filtByVolume(tokenData, max, min)]);
         break;
       }
     }
-  }, [filterOption])
+  }
 
   return (
     <div id="contracts">
@@ -273,6 +303,16 @@ export default function Contracts() {
             <option value="Volume">Volume</option>
           </select>
         </div>
+        {
+          filterOption !== "None" &&
+          <div className="filter">
+            <div className="title">Max</div>
+            <input value={max} onChange={e => setMax(e.target.value)} />
+            <div className="title">Min</div>
+            <input value={min} onChange={e => setMin(e.target.value)} />
+            <button onClick={runFilter}>Filter</button>
+          </div>
+        }
         <div className="contract-list">
           <div className="header">Name</div>
           <div className="header">Symbol</div>

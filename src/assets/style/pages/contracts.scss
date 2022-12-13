@@ -36,6 +36,27 @@
                 border-radius: 4px;
                 padding: 0 12px;
             }
+
+            input {
+                margin-top: 12px;
+                height: 32px;
+                border-bottom: 1px solid #B6B6BB;
+                border-radius: 4px;
+                padding: 0 12px;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            button {
+                padding: 3px 24px;
+                background: #004EDA;
+                border-radius: 4px;
+                text-align: center;
+                font-weight: 500;
+                color: #fff;
+            }
         }
 
         .contract-list {
