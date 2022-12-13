@@ -3,26 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react';
-import { detectSwap, buyTokens, sellTokens, getUniswapContract, getPairAddress } from '../utils/contractFunctions';
-import { DEXSCREENER_URL, GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
+// import { getPairInformationByChain } from 'dexscreener-api';
+// import { GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
 import { addContracts, getMainWalletData } from '../utils/api';
 const { weth } = addresses;
 
-export default function Contracts() {
+export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
   const [mainWalletData, setMainWalletData] = useState(null);
-  const [tokenData, setTokenData] = useState([]);
+  // const [tokenData, setTokenData] = useState([]);
   const [selectedToken, setSelectedToken] = useState("");
   // const [selectedTokenData, setSelectedTokenData] = useState(null);
   // const [pairData, setPairData] = useState([]);
-  const [sortOption, setSortOption] = useState("Address");
+  const [sortOption, setSortOption] = useState("24h Volume");
   const [filterOption, setFilterOption] = useState("None");
   const [max, setMax] = useState("");
   const [min, setMin] = useState("");
-  const [rawTokenData, setRawTokenData] = useState([]);
+  // const [rawTokenData, setRawTokenData] = useState([]);
   const [subwallet, setSubwallet] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -139,47 +139,6 @@ export default function Contracts() {
   }, [])
 
   useEffect(() => {
-    const getTokenData = async () => {
-      try {
-        let results = await fetch(GRAPHQL_URL, {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            query: GET_ALL_TOKENS
-          })
-        })
-        const characters = await results.json();
-        const data = characters.data.tokens;
-        let tokenData = [];
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].pairBase.length === 0) continue;
-          let pairData = await (await fetch(DEXSCREENER_URL(data[i].pairBase[0].id), {
-            method: 'GET',
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })).json();
-          console.log(data[i].pairBase[0].id, pairData);
-          if (!pairData.pair || !pairData.pair.liquidity || !pairData.pair.fdv) continue;
-          // const mcap = data[i].totalSupply * pairData.pair.priceUsd;
-          // console.log(mcap);
-          tokenData = [...tokenData, { ...data[i], ...pairData.pair }];
-          console.log(tokenData);
-          // tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
-          // // console.log(tokenData);
-          setRawTokenData(tokenData);
-          setTokenData(tokenData);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getTokenData();
-  }, [])
-
-  useEffect(() => {
     switch (sortOption) {
       case "Address": {
         setTokenData(tokenData => [...sortByAddress(false, tokenData)]);
@@ -238,7 +197,7 @@ export default function Contracts() {
         break;
       }
     }
-  }, [sortOption])
+  }, [sortOption, rawTokenData])
 
   const runFilter = () => {
     switch (filterOption) {
@@ -287,7 +246,7 @@ export default function Contracts() {
           <div className="title">
             Sort by
           </div>
-          <select onChange={e => setSortOption(e.target.value)}>
+          <select onChange={e => setSortOption(e.target.value)} value={sortOption}>
             <option value="Address">Address</option>
             <option value="Address(reverse)">Address(reverse)</option>
             <option value="Name">Name</option>
@@ -353,8 +312,12 @@ export default function Contracts() {
           }
         </div>
         {!rawTokenData.length && <div className="loading">Loading...</div>}
-        {(rawTokenData.length && !tokenData.length) && <div className="loading">No result</div>}
+        {(rawTokenData.length && !tokenData.length) ? <div className="loading">No result</div> : null}
       </div>
+      <div className="btn-container">
+        <button onClick={() => onSelect("")}>Add Contract</button>
+      </div>
+
       {/* <div className="title">
         Selected Contracts
       </div>
@@ -389,10 +352,13 @@ export default function Contracts() {
       >
         <ModalOverlay />
         <ModalContent className="account-modal">
-          <ModalHeader>Select subwallet to use</ModalHeader>
+          <ModalHeader>Select contract to use</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <select onChange={e => setSubwallet(e.target.value)}>
+            <div>Contract Address</div>
+            <input className="contract-input" value={selectedToken} onChange={e => setSelectedToken(e.target.value)} />
+            <div>Subwallet</div>
+            <select style={{ minWidth: "100%" }} onChange={e => setSubwallet(e.target.value)}>
               {
                 mainWalletData?.subwallets?.map((item, index) => (
                   <option key={index} value={item.public_key}>{item.public_key}</option>

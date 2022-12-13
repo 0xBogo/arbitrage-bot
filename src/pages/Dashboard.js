@@ -13,20 +13,16 @@ const { weth } = addresses;
 
 abiDecoder.addABI(uniswap.abi);
 
-export default function Dashboard({ ethAmount, ethLimit }) {
+export default function Dashboard({ contractsData, setContractsData, mainWalletData, getData }) {
   const { account, balance, isConnected, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
-  const [selectedToken, setSelectedToken] = useState("0xFa4719Ed5C32eaf2F346B73103f2204c755e3809");
-  const [selectedTokenData, setSelectedTokenData] = useState(null);
-  const [isBotRunning, setIsBotRunning] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [mainWalletData, setMainWalletData] = useState();
-  const [contractsData, setContractsData] = useState([]);
+  const [ethAmount, setEthAmount] = useState();
+  const [ethLimit, setEthLimit] = useState();
+  // const [mainWalletData, setMainWalletData] = useState();
+  // const [contractsData, setContractsData] = useState([]);
   const [contractAddress, setContractAddress] = useState("");
   const [selectedSubwallet, setSelectedSubwallet] = useState("");
-  const [contractNames, setContractNames] = useState([]);
-  const [contractSymbols, setContractSymbols] = useState([]);
 
   let flag = [];
 
@@ -65,7 +61,18 @@ export default function Dashboard({ ethAmount, ethLimit }) {
       })
       return;
     }
-    setIsBotRunning(p => [...p.slice(0, id), true, ...p.slice(id + 1)]);
+    if (!ethAmount || !ethLimit) {
+      toast({
+        title: 'Bot setting error',
+        description: "Please make sure values are over 0",
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
+      navigate("/settings");
+      return;
+    }
+    setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: true }, ...p.slice(id + 1)]);
     let subscription = web3.eth.subscribe('pendingTransactions', function (error, result) { })
       .on("data", function (txHash) {
         if (flag[txHash]) return;
@@ -118,16 +125,17 @@ export default function Dashboard({ ethAmount, ethLimit }) {
             })
       });
 
-    setSubscriptions(p => [...p.slice(0, id), subscription, ...p.slice(id + 1)]);
+    setContractsData(p => [...p.slice(0, id), { ...p[id], subscription: subscription }, ...p.slice(id + 1)]);
   }
 
   const stopBot = (id) => {
-    subscriptions[id].unsubscribe(function (error, success) {
+    contractsData[id].subscription.unsubscribe(function (error, success) {
       if (success)
         console.log('unsubscribed');
     });
-    setIsBotRunning(p => [...p.slice(0, id), false, ...p.slice(id + 1)]);
-    setSubscriptions(p => [...p.slice(0, id), null, ...p.slice(id + 1)]);
+    setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: false, subscription: null }, ...p.slice(id + 1)])
+    // setIsBotRunning(p => [...p.slice(0, id), false, ...p.slice(id + 1)]);
+    // setSubscriptions(p => [...p.slice(0, id), null, ...p.slice(id + 1)]);
   }
 
   async function detectSwap(tx, tokenAddress) {
@@ -235,26 +243,28 @@ export default function Dashboard({ ethAmount, ethLimit }) {
     }
   }
 
-  const getData = async () => {
-    if (!isConnected) return;
-    const data = await getMainWalletData(account);
-    setMainWalletData(data);
-    setContractsData([]);
-    setContractNames([]);
-    setContractSymbols([]);
-    for (let i = 0; i < data?.subwallets?.length; i++) {
-      const contractData = await getContractData(data.subwallets[i].public_key);
-      contractData.forEach(async (item) => {
-        setIsBotRunning([...isBotRunning, false]);
-        setSubscriptions([...subscriptions, null]);
-        const { name, symbol } = await getTokenData(item.addr);
-        setContractNames([...contractNames, name]);
-        setContractSymbols([...contractSymbols, symbol]);
-      })
-      setContractsData([...contractsData, ...contractData]);
-      setContractsData(contractsData => [...contractsData]);
-    }
-  }
+  // const getData = async () => {
+  //   if (!isConnected) return;
+  //   const data = await getMainWalletData(account);
+  //   setMainWalletData(data);
+  //   setContractsData([]);
+  //   // setContractNames([]);
+  //   // setContractSymbols([]);
+  //   for (let i = 0; i < data?.subwallets?.length; i++) {
+  //     const contractData = await getContractData(data.subwallets[i].public_key);
+  //     console.log(contractData);
+  //     let contract = [];
+  //     for (let j = 0; j < contractData.length; j++) {
+  //       // setIsBotRunning([...isBotRunning, false]);
+  //       // setSubscriptions([...subscriptions, null]);
+  //       const { name, symbol } = await getTokenData(contractData[j].addr);
+  //       contract = [...contract, { ...contractData[j], name: name, symbol: symbol, isBotRunning: false, subscription: null }];
+  //       console.log(contract);
+  //     }
+  //     setContractsData([...contractsData, ...contract]);
+  //   }
+  // }
+
 
   useEffect(() => {
     let email = sessionStorage.getItem("email");
@@ -262,8 +272,15 @@ export default function Dashboard({ ethAmount, ethLimit }) {
   }, [])
 
   useEffect(() => {
-    getData();
-  }, [account])
+    let ethAmount = sessionStorage.getItem("ethAmount");
+    let ethLimit = sessionStorage.getItem("ethLimit");
+    if (ethAmount) setEthAmount(ethAmount);
+    if (ethLimit) setEthLimit(ethLimit);
+  }, [])
+
+  // useEffect(() => {
+  //   getData();
+  // }, [account])
 
   return (
     <div id="dashboard">
@@ -324,8 +341,8 @@ export default function Dashboard({ ethAmount, ethLimit }) {
                 {
                   contractsData?.map((contract, index) => contract.subwallet_id === item._id && (
                     <>
-                      <div className="element">{contractNames[index]}</div>
-                      <div className="element">{contractSymbols[index]}</div>
+                      <div className="element">{contract.name}</div>
+                      <div className="element">{contract.symbol}</div>
                       <div className="element">{contract.addr}</div>
                       <div className="element">{(contract.buys / 1e18).toFixed(4)}</div>
                       <div className="element">{(contract.sells / 1e18).toFixed(4)}</div>
@@ -333,16 +350,16 @@ export default function Dashboard({ ethAmount, ethLimit }) {
                       <div className="element">{(contract.gas_spent / 1e9).toFixed(6)}</div>
                       <div className="element">
                         {
-                          isBotRunning[index]
+                          contract.isBotRunning
                             ? <button onClick={() => stopBot(index)}>Stop</button>
                             : <button onClick={() => startBot(index, contract.addr, item.public_key, item.private_key)}>Start</button>
                         }
                       </div>
                       <div className="element">
                         {
-                          isBotRunning[index]
+                          contract.isBotRunning
                             ? <button>Running</button>
-                            : <button onClick={ () => { deleteContract(item.public_key, contract.addr); window.location.reload() }}>Delete</button>
+                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData()}}>Delete</button>
                         }
                       </div>
                     </>

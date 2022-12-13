@@ -14,6 +14,7 @@
     "@walletconnect/web3-provider": "^1.8.0",
     "abi-decoder": "^2.4.0",
     "axios": "^1.2.0",
+    "dexscreener-api": "^0.0.7",
     "framer-motion": "^7.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

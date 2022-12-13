@@ -367,20 +367,21 @@ var deleteContract = function deleteContract(publicKey, contract) {
           }));
 
         case 3:
-          _context12.next = 8;
+          console.log("success");
+          _context12.next = 9;
           break;
 
-        case 5:
-          _context12.prev = 5;
+        case 6:
+          _context12.prev = 6;
           _context12.t0 = _context12["catch"](0);
           console.log(_context12.t0.message);
 
-        case 8:
+        case 9:
         case "end":
           return _context12.stop();
       }
     }
-  }, null, null, [[0, 5]]);
+  }, null, null, [[0, 6]]);
 };
 
 exports.deleteContract = deleteContract;
