@@ -7,9 +7,10 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody,
 // import { GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
 import { addContracts, getMainWalletData } from '../utils/api';
+import { getTokenData } from '../utils/contractFunctions';
 const { weth } = addresses;
 
-export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
+export default function Contracts({ tokenData, setTokenData, rawTokenData}) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
