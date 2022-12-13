@@ -26,9 +26,9 @@ function App() {
 
   const getData = async () => {
     if (!isConnected) return;
+    let temp = [];
     const data = await getMainWalletData(account);
     setMainWalletData(data);
-    setContractsData([]);
     for (let i = 0; i < data?.subwallets?.length; i++) {
       const contractData = await getContractData(data.subwallets[i].public_key);
       console.log(contractData);
@@ -38,12 +38,15 @@ function App() {
         contract = [...contract, { ...contractData[j], name: name, symbol: symbol, isBotRunning: false, subscription: null }];
         console.log(contract);
       }
-      setContractsData([...contractsData, ...contract]);
+      temp = [...temp, ...contract];
     }
+    setContractsData([...temp]);
   }
 
   useEffect(() => {
     getData();
+    const interval = setInterval(() => getData(), 10000);
+    return () => clearInterval(interval);
   }, [account])
 
   useEffect(() => {
@@ -72,10 +75,10 @@ function App() {
             }
             if (!pairRes) continue;
             const pairData = pairRes.pair;
-            console.log(pairData);
+            // console.log(pairData);
             if (!pairData || !pairData.liquidity || !pairData.fdv || pairData.fdv < 1000 || !pairData.volume.h24 || pairData.volume.h24 < 100) continue;
             tokenData_temp = [...tokenData_temp, { ...data[i], ...pairData }];
-            console.log(tokenData_temp);
+            // console.log(tokenData_temp);
             setRawTokenData([...rawTokenData, ...tokenData_temp]);
             setTokenData([...tokenData, ...tokenData_temp]);
           }
@@ -93,7 +96,7 @@ function App() {
         <Routes>
           <Route index element={<Dashboard contractsData={contractsData} setContractsData={setContractsData} mainWalletData={mainWalletData} getData={getData} />} />
           <Route path="/contracts" element={<Contracts tokenData={tokenData} setTokenData={setTokenData} rawTokenData={rawTokenData} />} />
-          <Route path="/stats" element={<Stats />} />
+          <Route path="/stats" element={<Stats contractsData={contractsData} />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/logup" element={<Logup />} />
           <Route path="/login" element={<Login />} />

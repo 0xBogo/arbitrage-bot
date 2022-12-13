@@ -243,29 +243,6 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     }
   }
 
-  // const getData = async () => {
-  //   if (!isConnected) return;
-  //   const data = await getMainWalletData(account);
-  //   setMainWalletData(data);
-  //   setContractsData([]);
-  //   // setContractNames([]);
-  //   // setContractSymbols([]);
-  //   for (let i = 0; i < data?.subwallets?.length; i++) {
-  //     const contractData = await getContractData(data.subwallets[i].public_key);
-  //     console.log(contractData);
-  //     let contract = [];
-  //     for (let j = 0; j < contractData.length; j++) {
-  //       // setIsBotRunning([...isBotRunning, false]);
-  //       // setSubscriptions([...subscriptions, null]);
-  //       const { name, symbol } = await getTokenData(contractData[j].addr);
-  //       contract = [...contract, { ...contractData[j], name: name, symbol: symbol, isBotRunning: false, subscription: null }];
-  //       console.log(contract);
-  //     }
-  //     setContractsData([...contractsData, ...contract]);
-  //   }
-  // }
-
-
   useEffect(() => {
     let email = sessionStorage.getItem("email");
     if (!email) window.location.href = "/login";
@@ -277,10 +254,6 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     if (ethAmount) setEthAmount(ethAmount);
     if (ethLimit) setEthLimit(ethLimit);
   }, [])
-
-  // useEffect(() => {
-  //   getData();
-  // }, [account])
 
   return (
     <div id="dashboard">
@@ -359,7 +332,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                         {
                           contract.isBotRunning
                             ? <button>Running</button>
-                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData()}}>Delete</button>
+                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData() }}>Delete</button>
                         }
                       </div>
                     </>
