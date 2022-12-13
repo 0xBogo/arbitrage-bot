@@ -4,7 +4,7 @@ import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react';
 import { detectSwap, buyTokens, sellTokens, getUniswapContract, getPairAddress } from '../utils/contractFunctions';
-import { GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
+import { DEXSCREENER_URL, GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
 import { addContracts, getMainWalletData } from '../utils/api';
 const { weth } = addresses;
@@ -76,8 +76,8 @@ export default function Contracts() {
 
   const sortByLiquidity = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.totalLiquidity;
-      const bb = b.totalLiquidity;
+      const aa = a.liquidity.usd;
+      const bb = b.liquidity.usd;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
@@ -86,8 +86,8 @@ export default function Contracts() {
 
   const sortByMCap = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.mcap;
-      const bb = b.mcap;
+      const aa = a.fdv;
+      const bb = b.fdv;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
@@ -96,8 +96,8 @@ export default function Contracts() {
 
   const sortByPrice = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.priceUSD;
-      const bb = b.priceUSD;
+      const aa = a.priceUsd;
+      const bb = b.priceUsd;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
@@ -106,8 +106,8 @@ export default function Contracts() {
 
   const sortByVolume = (isReverse, tokens) => {
     tokens.sort((a, b) => {
-      const aa = a.dailyVolumeUSD;
-      const bb = b.dailyVolumeUSD;
+      const aa = a.volume.h24;
+      const bb = b.volume.h24;
       return aa - bb;
     });
     if (isReverse) tokens = tokens.reverse();
@@ -116,8 +116,8 @@ export default function Contracts() {
 
   const filtByMCap = (tokens, max, min) => {
     const result = tokens.filter(token => {
-      if (max === "") return token.mcap > min;
-      if (min === "") return token.mcap < max;
+      if (max === "") return token.fdv > min;
+      if (min === "") return token.fdv < max;
       return token.mcap > min && token.mcap < max;
     });
     // console.log(result);
@@ -126,8 +126,8 @@ export default function Contracts() {
 
   const filtByVolume = (tokens, max, min) => {
     const result = tokens.filter(token => {
-      if (max === "") return token.dailyVolumeUSD > min;
-      if (min === "") return token.dailyVolumeUSD < max;
+      if (max === "") return token.volume.h24 > min;
+      if (min === "") return token.volume.h24 < max;
       return token.mcap > min && token.mcap < max;
     });
     return result;
@@ -154,12 +154,21 @@ export default function Contracts() {
         const data = characters.data.tokens;
         let tokenData = [];
         for (let i = 0; i < data.length; i++) {
-          if (data[i].tokenDayData.length === 0) continue;
           if (data[i].pairBase.length === 0) continue;
-          const mcap = data[i].totalSupply * data[i].tokenDayData[0].priceUSD;
-          // console.log(tokenData);
-          tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
-          // console.log(tokenData);
+          let pairData = await (await fetch(DEXSCREENER_URL(data[i].pairBase[0].id), {
+            method: 'GET',
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })).json();
+          console.log(data[i].pairBase[0].id, pairData);
+          if (!pairData.pair || !pairData.pair.liquidity || !pairData.pair.fdv) continue;
+          // const mcap = data[i].totalSupply * pairData.pair.priceUsd;
+          // console.log(mcap);
+          tokenData = [...tokenData, { ...data[i], ...pairData.pair }];
+          console.log(tokenData);
+          // tokenData = [...tokenData, { ...data[i], ...data[i].tokenDayData[0], mcap: mcap }];
+          // // console.log(tokenData);
           setRawTokenData(tokenData);
           setTokenData(tokenData);
         }
@@ -197,35 +206,35 @@ export default function Contracts() {
         break;
       }
       case "Liquidity": {
-        setTokenData(tokenData => [...sortByLiquidity(false, tokenData)]);
-        break;
-      }
-      case "Liquidity(reverse)": {
         setTokenData(tokenData => [...sortByLiquidity(true, tokenData)]);
         break;
       }
-      case "MCap": {
-        setTokenData(tokenData => [...sortByMCap(false, tokenData)]);
+      case "Liquidity(reverse)": {
+        setTokenData(tokenData => [...sortByLiquidity(false, tokenData)]);
         break;
       }
-      case "MCap(reverse)": {
+      case "MCap": {
         setTokenData(tokenData => [...sortByMCap(true, tokenData)]);
         break;
       }
-      case "Price": {
-        setTokenData(tokenData => [...sortByPrice(false, tokenData)]);
+      case "MCap(reverse)": {
+        setTokenData(tokenData => [...sortByMCap(false, tokenData)]);
         break;
       }
-      case "Price(reverse)": {
+      case "Price": {
         setTokenData(tokenData => [...sortByPrice(true, tokenData)]);
         break;
       }
+      case "Price(reverse)": {
+        setTokenData(tokenData => [...sortByPrice(false, tokenData)]);
+        break;
+      }
       case "24h Volume": {
-        setTokenData(tokenData => [...sortByVolume(false, tokenData)]);
+        setTokenData(tokenData => [...sortByVolume(true, tokenData)]);
         break;
       }
       case "24h Volume(reverse)": {
-        setTokenData(tokenData => [...sortByVolume(true, tokenData)]);
+        setTokenData(tokenData => [...sortByVolume(false, tokenData)]);
         break;
       }
     }
@@ -307,9 +316,9 @@ export default function Contracts() {
           filterOption !== "None" &&
           <div className="filter">
             <div className="title">Max</div>
-            <input value={max} onChange={e => setMax(e.target.value)} />
+            <input type="number" value={max} onChange={e => setMax(e.target.value)} />
             <div className="title">Min</div>
-            <input value={min} onChange={e => setMin(e.target.value)} />
+            <input type="number" value={min} onChange={e => setMin(e.target.value)} />
             <button onClick={runFilter}>Filter</button>
           </div>
         }
@@ -330,11 +339,11 @@ export default function Contracts() {
                 <div className="element">{item.name}</div>
                 <div className="element">{item.symbol}</div>
                 <a className="element" >{item.id}</a>
-                <a className="element" href={`https://dexscreener.com/ethereum/${item.pairBase[0].id}`} target="_blank">WETH/{item.symbol}</a>
-                <div className="element">{item.totalLiquidity}</div>
-                <div className="element">{item.mcap}</div>
-                <div className="element">{item.priceUSD}</div>
-                <div className="element">{item.dailyVolumeUSD}</div>
+                <a className="element" href={item.url} target="_blank">WETH/{item.symbol}</a>
+                <div className="element">{item.liquidity.usd}</div>
+                <div className="element">{item.fdv}</div>
+                <div className="element">{item.priceUsd}</div>
+                <div className="element">{item.volume.h24}</div>
                 <div className="element">0% / 0%</div>
                 <div className="element">
                   <button onClick={() => { onSelect(item.id) }}>Select</button>
@@ -343,7 +352,8 @@ export default function Contracts() {
             ))
           }
         </div>
-        {!tokenData.length && <div className="loading">Loading...</div>}
+        {!rawTokenData.length && <div className="loading">Loading...</div>}
+        {(rawTokenData.length && !tokenData.length) && <div className="loading">No result</div>}
       </div>
       {/* <div className="title">
         Selected Contracts
