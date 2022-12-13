@@ -34,6 +34,24 @@
   border-radius: 4px;
   padding: 0 12px;
 }
+#contracts .contract-list-section .filter input {
+  margin-top: 12px;
+  height: 32px;
+  border-bottom: 1px solid #B6B6BB;
+  border-radius: 4px;
+  padding: 0 12px;
+}
+#contracts .contract-list-section .filter input:focus {
+  outline: none;
+}
+#contracts .contract-list-section .filter button {
+  padding: 3px 24px;
+  background: #004EDA;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
 #contracts .contract-list-section .contract-list {
   max-height: 720px;
   width: 100%;

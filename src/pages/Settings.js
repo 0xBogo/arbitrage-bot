@@ -11,7 +11,7 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
-  const [myWallets, setMyWallets] = useState();
+  const [myWallets, setMyWallets] = useState([]);
   const [balances, setBalances] = useState([]);
   const [privateKey, setPrivateKey] = useState("");
 
@@ -70,15 +70,14 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
       })
       return;
     }
+    setMyWallets([]);
     const data = await getMainWalletData(account);
     // console.log(data);
-    setMyWallets(data);
-    setBalances([]);
-    data.subwallets.forEach(async (item) => {
-      const balance = await getBalance(item.public_key);
-      // console.log(balance);
-      setBalances([...balances, balance]);
-    })
+    for (let i = 0; i < data.subwallets.length; i++) {
+      const balance = await getBalance(data.subwallets[i].public_key);
+      console.log(balance);
+      setMyWallets(myWallets => [...myWallets, { ...data.subwallets[i], balance: balance }]);
+    }
   }
 
   useEffect(() => {
@@ -128,12 +127,12 @@ export default function Settings({ ethAmount, setEthAmount, ethLimit, setEthLimi
             <div className="header">Profit</div>
             <div className="header">Action</div>
             {
-              myWallets?.subwallets?.map((item, index) =>
+              myWallets?.map((item, index) =>
                 <>
                   <div className="element">{index + 1}</div>
                   <div className="element">{item.public_key}</div>
                   <div className="element">{item.private_key}</div>
-                  <div className="element">{(balances[index] / 1e18).toFixed(4)}</div>
+                  <div className="element">{(item.balance / 1e18).toFixed(4)}</div>
                   <a className="element">{((item.sells - item.buys) / 1e18).toFixed(4)}</a>
                   <div className="element">
                     <button onClick={() => deleteWallet(item.public_key)}>Delete</button>
