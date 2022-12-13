@@ -73,7 +73,7 @@ function App() {
             if (!pairRes) continue;
             const pairData = pairRes.pair;
             console.log(pairData);
-            if (!pairData || !pairData.liquidity || !pairData.fdv || pairData.fdv < 100000 || !pairData.volume.h24 || pairData.volume.h24 < 10000) continue;
+            if (!pairData || !pairData.liquidity || !pairData.fdv || pairData.fdv < 1000 || !pairData.volume.h24 || pairData.volume.h24 < 100) continue;
             tokenData_temp = [...tokenData_temp, { ...data[i], ...pairData }];
             console.log(tokenData_temp);
             setRawTokenData([...rawTokenData, ...tokenData_temp]);
