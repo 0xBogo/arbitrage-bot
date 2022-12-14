@@ -11,8 +11,8 @@ export default function Settings() {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
-  const [ethAmount, setEthAmount] = useState("0.05");
-  const [ethLimit, setEthLimit] = useState("1");
+  const [ethAmount, setEthAmount] = useState("0");
+  const [ethLimit, setEthLimit] = useState("0");
   const [myWallets, setMyWallets] = useState([]);
   const [balances, setBalances] = useState([]);
   const [privateKey, setPrivateKey] = useState("");
