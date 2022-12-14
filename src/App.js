@@ -64,7 +64,7 @@ function App() {
             })
           })
           const characters = await results.json();
-          const data = characters.data.tokens;
+          const data = characters.data?.tokens;
           for (let i = 0; i < data.length; i++) {
             if (data[i].pairBase.length === 0) continue;
             let pairRes = null;
