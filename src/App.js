@@ -34,8 +34,14 @@ function App() {
       console.log(contractData);
       let contract = [];
       for (let j = 0; j < contractData.length; j++) {
-        const { name, symbol } = await getTokenData(contractData[j].addr);
-        contract = [...contract, { ...contractData[j], name: name, symbol: symbol, isBotRunning: false, subscription: null }];
+        let token = null;
+        try {
+          token = await getTokenData(contractData[j].addr);
+        } catch (err) {
+
+        }
+        if (!token) continue;
+        contract = [...contract, { ...contractData[j], name: token.name, symbol: token.symbol, isBotRunning: false, subscription: null }];
         console.log(contract);
       }
       temp = [...temp, ...contract];
@@ -64,6 +70,7 @@ function App() {
             })
           })
           const characters = await results.json();
+          console.log(characters);
           const data = characters.data?.tokens;
           for (let i = 0; i < data.length; i++) {
             if (data[i].pairBase.length === 0) continue;
