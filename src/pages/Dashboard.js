@@ -332,7 +332,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                         {
                           contract.isBotRunning
                             ? <button>Running</button>
-                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); getData() }}>Delete</button>
+                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); }}>Delete</button>
                         }
                       </div>
                     </>

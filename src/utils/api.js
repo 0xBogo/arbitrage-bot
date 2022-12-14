@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 const server = "https://sandwitchbackend.vercel.app";
 // const server = "http://localhost:5000";
 

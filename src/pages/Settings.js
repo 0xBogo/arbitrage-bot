@@ -63,13 +63,13 @@ export default function Settings() {
 
   const getData = async () => {
     if (!isConnected) {
-      toast({
-        title: 'Wallet not connected',
-        description: "",
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-      })
+      // toast({
+      //   title: 'Wallet not connected',
+      //   description: "",
+      //   status: 'warning',
+      //   duration: 2000,
+      //   isClosable: true,
+      // })
       return;
     }
     setMyWallets([]);
