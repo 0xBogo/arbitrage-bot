@@ -10,7 +10,7 @@ import { addContracts, getMainWalletData } from '../utils/api';
 import { getTokenData } from '../utils/contractFunctions';
 const { weth } = addresses;
 
-export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
+export default function Contracts({ tokenData, setTokenData, rawTokenData, getMainData }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -379,9 +379,10 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => {
+            <Button colorScheme='blue' mr={3} onClick={async () => {
               console.log(subwallet, selectedToken);
-              addContracts(subwallet, [selectedToken]);
+              await addContracts(subwallet, [selectedToken]);
+              getMainData();
               onClose();
             }}>
               OK
