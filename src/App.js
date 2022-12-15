@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance } from './utils/contractFunctions';
 import { addContracts, deleteContract, getContractData, getMainWalletData, updateTradingData } from './utils/api';
@@ -31,7 +31,7 @@ function App() {
     setMainWalletData(data);
     for (let i = 0; i < data?.subwallets?.length; i++) {
       const contractData = await getContractData(data.subwallets[i].public_key);
-      console.log(contractData);
+      // console.log(contractData);
       let contract = [];
       for (let j = 0; j < contractData.length; j++) {
         let token = null;
@@ -41,8 +41,15 @@ function App() {
 
         }
         if (!token) continue;
-        contract = [...contract, { ...contractData[j], name: token.name, symbol: token.symbol, isBotRunning: false, subscription: null }];
-        console.log(contract);
+        // console.log("contracts data: ", contractsData);
+        const oldContract = contractsData?.filter(data => data.addr === contractData[j].addr && data.subwallet_id === contractData[j].subwallet_id);
+        // console.log("old contract: ", oldContract);
+        if (oldContract?.length) {
+          contract = [...contract, { ...contractData[j], name: token.name, symbol: token.symbol, isBotRunning: oldContract[0].isBotRunning, subscription: oldContract[0].subscription }];
+        } else {
+          contract = [...contract, { ...contractData[j], name: token.name, symbol: token.symbol, isBotRunning: false, subscription: null }];
+        }
+        // console.log(contract);
       }
       temp = [...temp, ...contract];
     }
@@ -50,10 +57,9 @@ function App() {
   }
 
   useEffect(() => {
+    if (!account) return;
     getData();
-    const interval = setInterval(() => getData(), 10000);
-    return () => clearInterval(interval);
-  }, [account])
+  }, [account]);
 
   useEffect(() => {
     const getTokenData = async () => {
@@ -70,9 +76,8 @@ function App() {
             })
           })
           const characters = await results.json();
-          console.log(characters);
           const data = characters.data?.tokens;
-          for (let i = 0; i < data.length; i++) {
+          for (let i = 0; i < data?.length; i++) {
             if (data[i].pairBase.length === 0) continue;
             let pairRes = null;
             try {
@@ -104,7 +109,7 @@ function App() {
           <Route index element={<Dashboard contractsData={contractsData} setContractsData={setContractsData} mainWalletData={mainWalletData} getData={getData} />} />
           <Route path="/contracts" element={<Contracts tokenData={tokenData} setTokenData={setTokenData} rawTokenData={rawTokenData} />} />
           <Route path="/stats" element={<Stats contractsData={contractsData} />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings getMainData={getData} />} />
           <Route path="/logup" element={<Logup />} />
           <Route path="/login" element={<Login />} />
         </Routes>

@@ -33,7 +33,6 @@ export default function Stats({ contractsData }) {
   useEffect(() => {
     getData();
     const interval = setInterval(() => getData(), 10000);
-    console.log(contractsData)
     return () => clearInterval(interval);
   }, [contractsData])
 
