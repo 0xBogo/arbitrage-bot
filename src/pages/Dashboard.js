@@ -23,8 +23,8 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
   // const [contractsData, setContractsData] = useState([]);
   const [contractAddress, setContractAddress] = useState("");
   const [selectedSubwallet, setSelectedSubwallet] = useState("");
-
-  let flag = [];
+  const [flag, setFlag] = useState(true);
+  // let flag = [];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -76,8 +76,8 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     console.log("bot running");
     let subscription = web3.eth.subscribe('pendingTransactions', function (error, result) { })
       .on("data", function (txHash) {
-        if (flag[txHash]) return;
-        flag[txHash] = true;
+        // if (flag[txHash]) return;
+        // flag[txHash] = true;
         // console.log(txHash);
         getBalance(publicKey).then(async (balance) => {
           if (balance > ethLimit * 1e18) {
@@ -105,7 +105,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                 if (tx) {
                   const wallet = { publicKey: publicKey, privateKey: privateKey };
                   const swapInput = await detectSwap(tx, tokenAddress);
-                  if (swapInput) {
+                  if (swapInput && flag) {
                     // console.log(tx);
                     console.log(swapInput);
                     const nonceCount = await web3.eth.getTransactionCount(publicKey);
@@ -114,7 +114,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     // console.log(contract);
                     const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
                     // let tokenAddress = swapInput.params[1].value.slice(-1)[0];
-                    // console.log(ethAmountHex, tokenAddress);
+                    console.log(ethAmountHex, tokenAddress);
                     let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
                     const tokenAmount = tokenAmounts[1];
                     console.log(tokenAmount);
@@ -129,7 +129,6 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
         });
 
       });
-
     setContractsData(p => [...p.slice(0, id), { ...p[id], subscription: subscription }, ...p.slice(id + 1)]);
   }
 
@@ -141,7 +140,6 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: false, subscription: null }, ...p.slice(id + 1)]);
     // setIsBotRunning(p => [...p.slice(0, id), false, ...p.slice(id + 1)]);
     // setSubscriptions(p => [...p.slice(0, id), null, ...p.slice(id + 1)]);
-    getData();
   }
 
   async function detectSwap(tx, tokenAddress) {
@@ -200,6 +198,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
         wallet.privateKey
       );
       console.log("BUY: ", createTx);
+      setFlag(false);
       const createReceipt = await web3.eth.sendSignedTransaction(createTx.rawTransaction);
       console.log(createReceipt);
       updateTradingData(wallet.publicKey, tokenAddress, ethAmount, 0, createReceipt.gasUsed)
@@ -244,6 +243,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       console.log(sellAmount);
       await updateTradingData(wallet.publicKey, tokenAddress, 0, sellAmount, createReceipt.gasUsed);
       console.log("SUCCESS");
+      setFlag(true);
       getData();
     } catch (err) {
       console.log("FAILED");
@@ -340,7 +340,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                         {
                           contract.isBotRunning
                             ? <button>Running</button>
-                            : <button onClick={() => { deleteContract(item.public_key, contract.addr); }}>Delete</button>
+                            : <button onClick={async () => { await deleteContract(item.public_key, contract.addr); getData() }}>Delete</button>
                         }
                       </div>
                     </>

@@ -107,7 +107,7 @@ function App() {
       <Layout>
         <Routes>
           <Route index element={<Dashboard contractsData={contractsData} setContractsData={setContractsData} mainWalletData={mainWalletData} getData={getData} />} />
-          <Route path="/contracts" element={<Contracts tokenData={tokenData} setTokenData={setTokenData} rawTokenData={rawTokenData} />} />
+          <Route path="/contracts" element={<Contracts tokenData={tokenData} setTokenData={setTokenData} rawTokenData={rawTokenData} getMainData={getData} />} />
           <Route path="/stats" element={<Stats contractsData={contractsData} />} />
           <Route path="/settings" element={<Settings getMainData={getData} />} />
           <Route path="/logup" element={<Logup />} />
