@@ -31,7 +31,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
-  const addContract = (subwallet, contracts) => {
+  const addContract = async (subwallet, contracts) => {
     if (!isConnected) {
       toast({
         title: 'Wallet not connected',
@@ -43,7 +43,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       return;
     }
     try {
-      addContracts(subwallet, contracts);
+      await addContracts(subwallet, contracts);
       getData();
     } catch (err) {
       console.log(err);
@@ -73,11 +73,12 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       return;
     }
     setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: true }, ...p.slice(id + 1)]);
+    console.log("bot running");
     let subscription = web3.eth.subscribe('pendingTransactions', function (error, result) { })
       .on("data", function (txHash) {
         if (flag[txHash]) return;
         flag[txHash] = true;
-        console.log(txHash);
+        // console.log(txHash);
         getBalance(publicKey).then(async (balance) => {
           if (balance > ethLimit * 1e18) {
             const nonce = await web3.eth.getTransactionCount(publicKey, 'latest');
@@ -97,32 +98,36 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
               }
             });
           }
-        });
-        if (balance)
-          web3.eth.getTransaction(txHash)
-            .then(async function (tx) {
-              if (tx?.from === publicKey) return;
-              if (tx) {
-                const wallet = { publicKey: publicKey, privateKey: privateKey };
-                const swapInput = await detectSwap(tx, tokenAddress);
-                if (swapInput) {
-                  console.log(tx);
-                  console.log(swapInput);
-                  const nonceCount = await web3.eth.getTransactionCount(publicKey);
-                  console.log(nonceCount);
-                  const contract = await getUniswapContract();
-                  const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
-                  let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
-                  const tokenAmount = tokenAmounts[1];
-                  console.log(tokenAmount);
-                  buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
-                  sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+          if (balance > ethAmount * 1e18)
+            web3.eth.getTransaction(txHash)
+              .then(async function (tx) {
+                if (tx?.from === publicKey) return;
+                if (tx) {
+                  const wallet = { publicKey: publicKey, privateKey: privateKey };
+                  const swapInput = await detectSwap(tx, tokenAddress);
+                  if (swapInput) {
+                    // console.log(tx);
+                    console.log(swapInput);
+                    const nonceCount = await web3.eth.getTransactionCount(publicKey);
+                    // console.log(nonceCount);
+                    const contract = await getUniswapContract();
+                    // console.log(contract);
+                    const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
+                    // let tokenAddress = swapInput.params[1].value.slice(-1)[0];
+                    // console.log(ethAmountHex, tokenAddress);
+                    let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
+                    const tokenAmount = tokenAmounts[1];
+                    console.log(tokenAmount);
+                    buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
+                    sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+                  }
                 }
-              }
-            })
-            .catch(function (err) {
-              console.log(err);
-            })
+              })
+              .catch(function (err) {
+                console.log(err);
+              })
+        });
+
       });
 
     setContractsData(p => [...p.slice(0, id), { ...p[id], subscription: subscription }, ...p.slice(id + 1)]);
@@ -131,11 +136,12 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
   const stopBot = (id) => {
     contractsData[id].subscription.unsubscribe(function (error, success) {
       if (success)
-        console.log('unsubscribed');
+        console.log('bot stopped');
     });
-    setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: false, subscription: null }, ...p.slice(id + 1)])
+    setContractsData(p => [...p.slice(0, id), { ...p[id], isBotRunning: false, subscription: null }, ...p.slice(id + 1)]);
     // setIsBotRunning(p => [...p.slice(0, id), false, ...p.slice(id + 1)]);
     // setSubscriptions(p => [...p.slice(0, id), null, ...p.slice(id + 1)]);
+    getData();
   }
 
   async function detectSwap(tx, tokenAddress) {
@@ -144,16 +150,18 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       let input = tx.input;
       try {
         input = abiDecoder.decodeMethod(input);
+        console.log(input)
         if (input?.name === "swapETHForExactTokens" || input?.name === "swapExactETHForTokens") {
           const params = input?.params;
           let destination;
           params.forEach((item) => {
             if (item.name === "path") {
-              destination = item.value.slice(-1)[0]
+              destination = item.value.slice(-1)[0];
             }
           })
           // console.log(path?.value[path?.value?.length - 1]);
           if (destination.toLowerCase() !== tokenAddress.toLowerCase()) return null;
+          console.log("swap transaction detected");
           return input;
         }
         return null;
@@ -206,7 +214,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     try {
       const gasPrice = tx.gasPrice;
       const newGasPrice = Math.floor(parseInt(gasPrice) * 0.9);
-      const newGasPriceHex = '0x' + (2 * 1e9).toString(16);
+      const newGasPriceHex = '0x' + newGasPrice.toString(16);
       const gasLimit = Math.floor(tx.gas * 1.5);
       const gasLimitHex = '0x' + gasLimit.toString(16);
       const tokenAmountHex = '0x' + Number(tokenAmount).toString(16);
@@ -234,7 +242,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       const sellAmountData = createReceipt.logs.slice(-1)[0];
       const sellAmount = parseInt(sellAmountData.data, 16);
       console.log(sellAmount);
-      updateTradingData(wallet.publicKey, tokenAddress, 0, sellAmount, createReceipt.gasUsed);
+      await updateTradingData(wallet.publicKey, tokenAddress, 0, sellAmount, createReceipt.gasUsed);
       console.log("SUCCESS");
       getData();
     } catch (err) {

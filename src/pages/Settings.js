@@ -7,7 +7,7 @@ import uniswap from "../contracts/uniswap.json";
 import { addSubwallet, deleteSubwallet, getMainWalletData } from '../utils/api';
 import { getBalance } from '../utils/contractFunctions';
 
-export default function Settings() {
+export default function Settings({ getMainData }) {
   const { account, balance, isConnected, web3, connect, disconnect } = useContext(Wallet);
   const toast = useToast();
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ export default function Settings() {
     try {
       const wallet = web3.eth.accounts.privateKeyToAccount(privateKey);
       addSubwallet(account, wallet.address, privateKey);
+      getMainData();
       getData();
     } catch (err) {
       console.log(err);
@@ -55,6 +56,7 @@ export default function Settings() {
     }
     try {
       deleteSubwallet(address);
+      getMainData();
       getData();
     } catch (err) {
       console.log(err);
@@ -77,7 +79,6 @@ export default function Settings() {
     // console.log(data);
     for (let i = 0; i < data.subwallets.length; i++) {
       const balance = await getBalance(data.subwallets[i].public_key);
-      console.log(balance);
       setMyWallets(myWallets => [...myWallets, { ...data.subwallets[i], balance: balance }]);
     }
   }

@@ -359,7 +359,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
         finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
-        width="500px"
+        width="600px"
       >
         <ModalOverlay />
         <ModalContent className="account-modal">
@@ -369,7 +369,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData }) {
             <div>Contract Address</div>
             <input className="contract-input" value={selectedToken} onChange={e => setSelectedToken(e.target.value)} />
             <div>Subwallet</div>
-            <select style={{ minWidth: "100%" }} onChange={e => setSubwallet(e.target.value)}>
+            <select style={{ maxWidth: "100%", overflow: 'hidden' }} onChange={e => setSubwallet(e.target.value)}>
               {
                 mainWalletData?.subwallets?.map((item, index) => (
                   <option key={index} value={item.public_key}>{item.public_key}</option>
