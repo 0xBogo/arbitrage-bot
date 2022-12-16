@@ -86,10 +86,10 @@ export async function buyTokens(tx, nonce, tokenAddress, account, ethAmountHex, 
         const gasLimit = Math.floor(tx.gas * 1.2);
         const gasLimitHex = '0x' + gasLimit.toString(16);
         const path = [weth, tokenAddress];
-        const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
-        const deadlineHex = "0x" + deadline.toString(16);
+        //const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+        //const deadlineHex = "0x" + deadline.toString(16);
         const contract = await getUniswapContract();
-        const buyTx = contract.methods.swapExactETHForTokens(0, path, account.publicKey, deadlineHex);
+        const buyTx = contract.methods.swapExactETHForTokens(0, path, account.publicKey, Date.now() + 1000 * 60);
         console.log(gasLimit, newGasPrice);
         const createTx = await web3.eth.accounts.signTransaction(
             {
@@ -122,8 +122,8 @@ export async function sellTokens(tx, nonce, tokenAddress, account, tokenAmount) 
         const gasLimitHex = '0x' + gasLimit.toString(16);
         const tokenAmountHex = '0x' + Number(tokenAmount).toString(16);
         const path = [tokenAddress, weth];
-        const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
-        const deadlineHex = "0x" + deadline.toString(16);
+        //const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+        //const deadlineHex = "0x" + deadline.toString(16);
         // const factory = await getUniswapFactoryContract();
         // const pair = await factory.methods.getPair(weth, token).call();
         // const tokenContract = await getERC20Contract(token);
@@ -142,7 +142,7 @@ export async function sellTokens(tx, nonce, tokenAddress, account, tokenAmount) 
         // console.log(receipt);
         const contract = await getUniswapContract();
         console.log(tokenAmountHex);
-        const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, account.publicKey, deadlineHex);
+        const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, account.publicKey, Date.now() + 1000 * 60);
         console.log(gasLimit, newGasPrice);
         const createTx = await web3.eth.accounts.signTransaction(
             {
