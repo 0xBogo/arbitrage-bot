@@ -180,10 +180,10 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       const gasLimitHex = '0x' + gasLimit.toString(16);
       const ethAmountHex = '0x' + ethAmount.toString(16);
       const path = [weth, tokenAddress];
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
-      const deadlineHex = "0x" + deadline.toString(16);
+      //const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+      //const deadlineHex = "0x" + deadline.toString(16);
       const contract = await getUniswapContract();
-      const buyTx = contract.methods.swapExactETHForTokens(0, path, wallet.publicKey, deadlineHex);
+      const buyTx = contract.methods.swapExactETHForTokens(0, path, wallet.publicKey, Date.now() + 1000 * 60);
       console.log(gasLimit, newGasPrice);
       const createTx = await web3.eth.accounts.signTransaction(
         {
@@ -218,11 +218,11 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       const gasLimitHex = '0x' + gasLimit.toString(16);
       const tokenAmountHex = '0x' + Number(tokenAmount).toString(16);
       const path = [tokenAddress, weth];
-      const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
-      const deadlineHex = "0x" + deadline.toString(16);
+      //const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
+      //const deadlineHex = "0x" + deadline.toString(16);
       const contract = await getUniswapContract();
       console.log(tokenAmountHex);
-      const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, wallet.publicKey, deadlineHex);
+      const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
       console.log(gasLimit, newGasPrice);
       const createTx = await web3.eth.accounts.signTransaction(
         {
