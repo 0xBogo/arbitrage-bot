@@ -115,11 +115,15 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
                     // let tokenAddress = swapInput.params[1].value.slice(-1)[0];
                     console.log(ethAmountHex, tokenAddress);
-                    let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
-                    const tokenAmount = tokenAmounts[1];
+                    //let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
+                    //const tokenAmount = tokenAmounts[1];
                     console.log(tokenAmount);
                     buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
-                    sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+
+                    const tokenAmount = await contract.methods.balanceOf(publicKey);
+                    if(tokenAmount !== 0){
+                      sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+                    }
                   }
                 }
               })
