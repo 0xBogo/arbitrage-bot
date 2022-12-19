@@ -117,10 +117,11 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     console.log(ethAmountHex, tokenAddress);
                     //let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
                     //const tokenAmount = tokenAmounts[1];
-                    console.log(tokenAmount);
+                    //console.log(tokenAmount);
                     buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
-
-                    const tokenAmount = await contract.methods.balanceOf(publicKey);
+                    
+                    const tokenContract = await getERC20Contract(tokenAddress);
+                    const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey);
                     if(tokenAmount !== 0){
                       sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
                     }
