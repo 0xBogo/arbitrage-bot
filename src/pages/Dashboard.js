@@ -122,9 +122,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     
                     const tokenContract = await getERC20Contract(tokenAddress);
                     const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey);
-                    if(tokenAmount !== 0){
-                      sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
-                    }
+                    sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
                   }
                 }
               })
