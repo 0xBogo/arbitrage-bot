@@ -5,7 +5,7 @@ import { useToast } from "@chakra-ui/react";
 import Web3 from 'web3';
 import abiDecoder from 'abi-decoder';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
-import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance } from '../utils/contractFunctions';
+import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance, getERC20Contract } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
 import { addContracts, deleteContract, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
 import addresses from "../contracts/address.json";
@@ -115,13 +115,12 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     const ethAmountHex = '0x' + (ethAmount * 1e18).toString(16);
                     // let tokenAddress = swapInput.params[1].value.slice(-1)[0];
                     console.log(ethAmountHex, tokenAddress);
-                    //let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
-                    //const tokenAmount = tokenAmounts[1];
+                    // let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
+                    // const tokenAmount = tokenAmounts[1];
                     //console.log(tokenAmount);
-                    buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
-                    
+                    await buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
                     const tokenContract = await getERC20Contract(tokenAddress);
-                    const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey);
+                    const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey).call();
                     sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
                   }
                 }
@@ -214,6 +213,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
 
   async function sellTokens(tx, nonce, tokenAddress, wallet, tokenAmount) {
     try {
+      console.log(tokenAmount);
       const gasPrice = tx.gasPrice;
       const newGasPrice = Math.floor(parseInt(gasPrice) * 0.9);
       const newGasPriceHex = '0x' + newGasPrice.toString(16);
@@ -225,12 +225,12 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       //const deadlineHex = "0x" + deadline.toString(16);
       const contract = await getUniswapContract();
       console.log(tokenAmountHex);
-      const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
+      const sellTx = contract.methods.swapExactTokensForETH(tokenAmount, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
       console.log(gasLimit, newGasPrice);
       const createTx = await web3.eth.accounts.signTransaction(
         {
           nonce: nonce,
-          from: wallet.publicKey,
+          // from: wallet.publicKey,
           to: uniswap.address,
           gasPrice: newGasPriceHex,
           gas: gasLimitHex,
