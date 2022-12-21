@@ -6,8 +6,9 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody,
 // import { getPairInformationByChain } from 'dexscreener-api';
 // import { GET_ALL_TOKENS, GRAPHQL_URL } from '../utils/constants';
 import addresses from "../contracts/address.json";
+import uniswap from "../contracts/uniswap.json";
 import { addContracts, getMainWalletData } from '../utils/api';
-import { getTokenData } from '../utils/contractFunctions';
+import { getERC20Contract, getTokenData } from '../utils/contractFunctions';
 const { weth } = addresses;
 
 export default function Contracts({ tokenData, setTokenData, rawTokenData, getMainData }) {
@@ -24,7 +25,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
   const [max, setMax] = useState("");
   const [min, setMin] = useState("");
   // const [rawTokenData, setRawTokenData] = useState([]);
-  const [subwallet, setSubwallet] = useState("");
+  const [subwallet, setSubwallet] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -45,8 +46,55 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
       })
       return;
     }
-    setSubwallet(data?.subwallets[0].public_key);
+    setSubwallet(data?.subwallets[0]);
     onOpen();
+  }
+
+  const addContract = async () => {
+    try {
+      console.log(subwallet, selectedToken);
+      // toast({
+      //   title: 'Approving...',
+      //   description: "",
+      //   status: 'warning',
+      //   duration: 2000,
+      //   isClosable: true,
+      // })
+      // const nonce = await web3.eth.getTransactionCount(subwallet.public_key);
+      // const contract = await getERC20Contract(selectedToken);
+      // const approveTx = contract.methods.approve(uniswap.address, "115792089237316195423570985008687907853269984665640564039457584007913129639935");
+      // const createTx = await web3.eth.accounts.signTransaction(
+      //   {
+      //     nonce: nonce,
+      //     from: subwallet.public_key,
+      //     to: selectedToken,
+      //     gas: 50000,
+      //     data: approveTx.encodeABI()
+      //   },
+      //   subwallet.private_key
+      // )
+      // const createReceipt = await web3.eth.sendSignedTransaction(createTx.rawTransaction);
+      // console.log(createReceipt);
+      await addContracts(subwallet.public_key, [selectedToken]);
+      getMainData();
+      toast({
+        title: 'contract added',
+        description: "",
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
+    } catch (err) {
+      toast({
+        title: 'Add contract error',
+        description: "",
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+      console.log(err);
+    }
+    onClose();
   }
 
   const sortByAddress = (isReverse, tokens) => {
@@ -372,19 +420,14 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
             <select style={{ maxWidth: "100%", overflow: 'hidden' }} onChange={e => setSubwallet(e.target.value)}>
               {
                 mainWalletData?.subwallets?.map((item, index) => (
-                  <option key={index} value={item.public_key}>{item.public_key}</option>
+                  <option key={index} value={item}>{item.public_key}</option>
                 ))
               }
             </select>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={async () => {
-              console.log(subwallet, selectedToken);
-              await addContracts(subwallet, [selectedToken]);
-              getMainData();
-              onClose();
-            }}>
+            <Button colorScheme='blue' mr={3} onClick={addContract}>
               OK
             </Button>
             <Button onClick={onClose}>Cancel</Button>
