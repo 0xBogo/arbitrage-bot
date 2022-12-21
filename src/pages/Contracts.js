@@ -46,7 +46,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
       })
       return;
     }
-    setSubwallet(data?.subwallets[0]);
+    setSubwallet(data?.subwallets[0].public_key);
     onOpen();
   }
 
@@ -75,7 +75,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
       // )
       // const createReceipt = await web3.eth.sendSignedTransaction(createTx.rawTransaction);
       // console.log(createReceipt);
-      await addContracts(subwallet.public_key, [selectedToken]);
+      await addContracts(subwallet, [selectedToken]);
       getMainData();
       toast({
         title: 'contract added',
@@ -420,7 +420,7 @@ export default function Contracts({ tokenData, setTokenData, rawTokenData, getMa
             <select style={{ maxWidth: "100%", overflow: 'hidden' }} onChange={e => setSubwallet(e.target.value)}>
               {
                 mainWalletData?.subwallets?.map((item, index) => (
-                  <option key={index} value={item}>{item.public_key}</option>
+                  <option key={index} value={item.public_key}>{item.public_key}</option>
                 ))
               }
             </select>
