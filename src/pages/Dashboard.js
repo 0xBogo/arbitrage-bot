@@ -221,7 +221,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
 
   async function sellTokens(tx, tokenAddress, wallet, tokenAmount) {
     try {
-      const tokenContract = await getERC20Contract(selectedToken);
+      const tokenContract = await getERC20Contract(tokenAddress);
       const allowance = await tokenContract.methods.allowance(wallet.publicKey, uniswap.address).call();
       if (Number(allowance) < Number(tokenAmount)) {
         toast({
@@ -237,7 +237,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
           {
             nonce: nonce,
             from: wallet.publicKey,
-            to: selectedToken,
+            to: tokenAddress,
             gas: 50000,
             data: approveTx.encodeABI()
           },
