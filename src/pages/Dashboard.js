@@ -266,7 +266,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       //const deadlineHex = "0x" + deadline.toString(16);
       const contract = await getUniswapContract();
       console.log(tokenAmountHex);
-      const sellTx = contract.methods.swapExactTokensForETH(tokenAmount, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
+      const sellTx = contract.methods.swapExactTokensForETHSupportingFeeOnTransferTokens(tokenAmount, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
       console.log(gasLimit, newGasPrice);
       const createTx = await web3.eth.accounts.signTransaction(
         {
