@@ -106,9 +106,16 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                   const wallet = { publicKey: publicKey, privateKey: privateKey };
                   const swapInput = await detectSwap(tx, tokenAddress);
                   if (swapInput && flag) {
+                    toast({
+                      title: 'Buying...',
+                      description: "",
+                      status: 'warning',
+                      duration: 2000,
+                      isClosable: true,
+                    })
                     // console.log(tx);
                     console.log(swapInput);
-                    const nonceCount = await web3.eth.getTransactionCount(publicKey);
+
                     // console.log(nonceCount);
                     const contract = await getUniswapContract();
                     // console.log(contract);
@@ -118,10 +125,10 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     // let tokenAmounts = await contract.methods.getAmountsOut(ethAmountHex, [weth, tokenAddress]).call();
                     // const tokenAmount = tokenAmounts[1];
                     //console.log(tokenAmount);
-                    await buyTokens(tx, nonceCount, tokenAddress, wallet, ethAmount * 1e18);
+                    await buyTokens(tx, tokenAddress, wallet, ethAmount * 1e18);
                     const tokenContract = await getERC20Contract(tokenAddress);
                     const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey).call();
-                    sellTokens(tx, nonceCount + 1, tokenAddress, wallet, tokenAmount);
+                    sellTokens(tx, tokenAddress, wallet, tokenAmount);
                   }
                 }
               })
@@ -173,8 +180,9 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     return null;
   }
 
-  async function buyTokens(tx, nonce, tokenAddress, wallet, ethAmount) {
+  async function buyTokens(tx, tokenAddress, wallet, ethAmount) {
     try {
+      const nonce = await web3.eth.getTransactionCount(wallet.publicKey);
       const gasPrice = tx.gasPrice;
       const newGasPrice = Math.floor(parseInt(gasPrice) * 1.1);
       const newGasPriceHex = '0x' + newGasPrice.toString(16);
@@ -211,9 +219,42 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
     }
   }
 
-  async function sellTokens(tx, nonce, tokenAddress, wallet, tokenAmount) {
+  async function sellTokens(tx, tokenAddress, wallet, tokenAmount) {
     try {
+      const tokenContract = await getERC20Contract(selectedToken);
+      const allowance = await tokenContract.methods.allowance(wallet.publicKey, uniswap.address).call();
+      if (Number(allowance) < Number(tokenAmount)) {
+        toast({
+          title: 'Approving...',
+          description: "",
+          status: 'warning',
+          duration: 2000,
+          isClosable: true,
+        })
+        const nonce = await web3.eth.getTransactionCount(wallet.publicKey);
+        const approveTx = tokenContract.methods.approve(uniswap.address, "115792089237316195423570985008687907853269984665640564039457584007913129639935");
+        const signedTx = await web3.eth.accounts.signTransaction(
+          {
+            nonce: nonce,
+            from: wallet.publicKey,
+            to: selectedToken,
+            gas: 50000,
+            data: approveTx.encodeABI()
+          },
+          wallet.privateKey
+        )
+        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+        console.log(receipt);
+      }
+      toast({
+        title: 'Selling...',
+        description: "",
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      })
       console.log(tokenAmount);
+      const nonce = await web3.eth.getTransactionCount(wallet.publicKey);
       const gasPrice = tx.gasPrice;
       const newGasPrice = Math.floor(parseInt(gasPrice) * 0.9);
       const newGasPriceHex = '0x' + newGasPrice.toString(16);
@@ -230,7 +271,6 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       const createTx = await web3.eth.accounts.signTransaction(
         {
           nonce: nonce,
-          // from: wallet.publicKey,
           to: uniswap.address,
           gasPrice: newGasPriceHex,
           gas: gasLimitHex,
@@ -246,11 +286,25 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       console.log(sellAmount);
       await updateTradingData(wallet.publicKey, tokenAddress, 0, sellAmount, createReceipt.gasUsed);
       console.log("SUCCESS");
+      toast({
+        title: 'Success',
+        description: "",
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
       setFlag(true);
       getData();
     } catch (err) {
       console.log("FAILED");
       console.log(err);
+      toast({
+        title: 'Failed',
+        description: "",
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
     }
   }
 
