@@ -1,15 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
-import Web3 from 'web3';
 import abiDecoder from 'abi-decoder';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
-import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance, getERC20Contract } from '../utils/contractFunctions';
+import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance, getERC20Contract, extractParameters } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
 import { addContracts, deleteContract, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
 import addresses from "../contracts/address.json";
-const { weth } = addresses;
+const { weth, uniswap3Router2 } = addresses;
 
 abiDecoder.addABI(uniswap.abi);
 
@@ -152,7 +152,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
   }
 
   async function detectSwap(tx, tokenAddress) {
-    if (tx?.to === uniswap.address) {
+    if (tx?.to?.toLowerCase() === uniswap.address.toLowerCase()) {
       console.log(tx);
       let input = tx.input;
       try {
@@ -175,6 +175,64 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       } catch (err) {
         console.log(err);
         return null;
+      }
+    }
+    // console.log(tx.to);
+    if (tx?.to?.toLowerCase() === uniswap3Router2.toLowerCase()) {
+      // console.log(tx.input);
+      let input = tx.input;
+      if (input.slice(0, 10) === "0x5ae401dc") {
+        try {
+          const calldata = tx.input.slice(10);
+          let calls = web3.eth.abi.decodeParameters(['uint256', 'bytes[]'], calldata)[1];
+          for (let index = 0; index < calls.length; index++) {
+            let call = calls[index].replace("0x", "");
+            let selector = call.slice(0, 8);
+            console.log(selector);
+            if (selector === "04e45aaf") {
+              let data = call.slice(8);
+              let request = await axios.get(
+                `https://www.4byte.directory/api/v1/signatures/?hex_signature=${selector}`
+              );
+              let signature = request.data.results[0].text_signature;
+              // console.log(
+              //   `Call ${index} : Selector : ${selector} Signature : ${signature} Data size : ${data.length}`
+              // );
+
+              let parameters = extractParameters(signature);
+              let decoded = web3.eth.abi.decodeParameters(parameters, data);
+
+              for (let i = 0; i < parameters.length; i++) {
+                console.log(decoded[i]);
+                if (decoded[i][0].toLowerCase() === weth.toLowerCase() && decoded[i][1].toLowerCase() === tokenAddress.toLowerCase()) {
+                  console.log(true);
+                  return input;
+                }
+              }
+            }
+            if (selector === "472b43f3") {
+              let data = call.slice(8);
+              let request = await axios.get(
+                `https://www.4byte.directory/api/v1/signatures/?hex_signature=${selector}`
+              );
+              let signature = request.data.results[0].text_signature;
+
+              let parameters = extractParameters(signature);
+              let decoded = web3.eth.abi.decodeParameters(parameters, data);
+
+              for (let i = 0; i < parameters.length; i++) {
+                console.log(decoded[i]);
+                if (decoded[i][0].toLowerCase() === weth.toLowerCase() && decoded[i][1].toLowerCase() === tokenAddress.toLowerCase()) {
+                  return input;
+                }
+              }
+            }
+          }
+          return null;
+        } catch (err) {
+          console.log(err);
+          return null;
+        }
       }
     }
     return null;
@@ -256,9 +314,9 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       console.log(tokenAmount);
       const nonce = await web3.eth.getTransactionCount(wallet.publicKey);
       const gasPrice = tx.gasPrice;
-      const newGasPrice = Math.floor(parseInt(gasPrice) * 0.9);
+      const newGasPrice = Math.floor(parseInt(gasPrice) * 0.8);
       const newGasPriceHex = '0x' + newGasPrice.toString(16);
-      const gasLimit = Math.floor(tx.gas * 1.5);
+      const gasLimit = Math.floor(tx.gas * 1.3);
       const gasLimitHex = '0x' + gasLimit.toString(16);
       const tokenAmountHex = '0x' + Number(tokenAmount).toString(16);
       const path = [tokenAddress, weth];
@@ -266,7 +324,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       //const deadlineHex = "0x" + deadline.toString(16);
       const contract = await getUniswapContract();
       console.log(tokenAmountHex);
-      const sellTx = contract.methods.swapExactTokensForETH(tokenAmount, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
+      const sellTx = contract.methods.swapExactTokensForETHSupportingFeeOnTransferTokens(tokenAmount, 0, path, wallet.publicKey, Date.now() + 1000 * 60);
       console.log(gasLimit, newGasPrice);
       const createTx = await web3.eth.accounts.signTransaction(
         {
