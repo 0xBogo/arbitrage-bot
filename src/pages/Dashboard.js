@@ -5,7 +5,7 @@ import { Wallet } from '../providers/WalletProvider';
 import { useToast } from "@chakra-ui/react";
 import abiDecoder from 'abi-decoder';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Button, Input } from '@chakra-ui/react'
-import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance, getERC20Contract, extractParameters } from '../utils/contractFunctions';
+import { web3, detectSwap, buyTokens, sellTokens, getUniswapContract, getTokenData, getBalance, getERC20Contract, extractParameters, delay } from '../utils/contractFunctions';
 import uniswap from "../contracts/uniswap.json";
 import { addContracts, deleteContract, getContractData, getMainWalletData, updateTradingData } from '../utils/api';
 import addresses from "../contracts/address.json";
@@ -126,6 +126,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
                     // const tokenAmount = tokenAmounts[1];
                     //console.log(tokenAmount);
                     await buyTokens(tx, tokenAddress, wallet, ethAmount * 1e18);
+                    await delay(5000);
                     const tokenContract = await getERC20Contract(tokenAddress);
                     const tokenAmount = await tokenContract.methods.balanceOf(wallet.publicKey).call();
                     sellTokens(tx, tokenAddress, wallet, tokenAmount);
@@ -314,7 +315,7 @@ export default function Dashboard({ contractsData, setContractsData, mainWalletD
       console.log(tokenAmount);
       const nonce = await web3.eth.getTransactionCount(wallet.publicKey);
       const gasPrice = tx.gasPrice;
-      const newGasPrice = Math.floor(parseInt(gasPrice) * 0.8);
+      const newGasPrice = Math.floor(parseInt(gasPrice) * 1);
       const newGasPriceHex = '0x' + newGasPrice.toString(16);
       const gasLimit = Math.floor(tx.gas * 1.3);
       const gasLimitHex = '0x' + gasLimit.toString(16);

@@ -180,3 +180,7 @@ export function extractParameters(signature) {
 
     return params;
 }
+
+export function delay(time) {
+    return new Promise( res => setTimeout(res, time) );
+}
