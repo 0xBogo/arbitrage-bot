@@ -1,3 +1,4 @@
 {
-    "weth": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    "weth": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "uniswap3Router2": "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45"
 }

@@ -5,7 +5,7 @@ import erc20ABI from "../contracts/erc-20.abi.json";
 import addresses from "../contracts/address.json";
 import abiDecoder from 'abi-decoder';
 
-const {weth} = addresses;
+const { weth } = addresses;
 
 const provider = new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161");
 // const provider = new Web3.providers.WebsocketProvider("wss://goerli.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161");
@@ -32,7 +32,7 @@ export const getTokenData = async (address) => {
     const symbol = await _contract.methods.symbol().call();
     const decimals = await _contract.methods.decimals().call();
     const totalSupply = await _contract.methods.totalSupply().call();
-    return {name: name, symbol: symbol, decimals: decimals, totalSupply: totalSupply};
+    return { name: name, symbol: symbol, decimals: decimals, totalSupply: totalSupply };
 }
 
 export const getBalance = async (address) => {
@@ -164,4 +164,19 @@ export async function sellTokens(tx, nonce, tokenAddress, account, tokenAmount) 
         console.log("FAILED");
         console.log(err);
     }
+}
+
+export function extractParameters(signature) {
+    let params = [];
+
+    const allParameters = /\b[^()]+\((.*)\)$/gm;
+    const splitParameters = /((\(.+?\))|([^,() ]+)){1}/gm;
+
+    let _allParameters = allParameters.exec(signature)[1];
+    let match;
+    while ((match = splitParameters.exec(_allParameters))) {
+        params.push(match[0]);
+    }
+
+    return params;
 }
