@@ -143,7 +143,7 @@ export async function sellTokens(tx, nonce, tokenAddress, account, tokenAmount) 
         // console.log(receipt);
         const contract = await getUniswapContract();
         console.log(tokenAmountHex);
-        const sellTx = contract.methods.swapExactTokensForETH(tokenAmountHex, 0, path, account.publicKey, Date.now() + 1000 * 60);
+        const sellTx = contract.methods.swapExactTokensForETHSupportingFeeOnTransferTokens(tokenAmountHex, 0, path, account.publicKey, Date.now() + 1000 * 60);
         console.log(gasLimit, newGasPrice);
         const createTx = await web3.eth.accounts.signTransaction(
             {
